@@ -13,8 +13,11 @@ public class CompositeFunctionTest {
 
         IdentityFunction fFunction = new IdentityFunction();
         IdentityFunction gFunction = new IdentityFunction();
+        TangentFunction hFunction = new TangentFunction();
         CompositeFunction firstFunction = new CompositeFunction(fFunction, gFunction);
-        assertEquals(firstFunction.apply(1), 1, DELTA);
+        CompositeFunction secondFunction =new CompositeFunction(fFunction,hFunction);
+        assertEquals(firstFunction.apply(1),1,DELTA);
+        assertEquals(secondFunction.apply(100),1,DELTA);
 
     }
 }
