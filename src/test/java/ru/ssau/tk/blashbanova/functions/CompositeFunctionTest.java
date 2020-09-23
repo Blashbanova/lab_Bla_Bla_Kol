@@ -5,7 +5,6 @@ import org.testng.annotations.Test;
 import static org.testng.Assert.*;
 
 public class CompositeFunctionTest {
-
     private final static double DELTA = 0.0001;
 
     @Test

@@ -1,7 +1,6 @@
 package ru.ssau.tk.blashbanova.functions;
 
 public interface TabulatedFunction extends MathFunction {
-
     //Метод получения количества табулированных значений:
     int getCount();
 
@@ -25,5 +24,4 @@ public interface TabulatedFunction extends MathFunction {
 
     //Метод, возвращающий самый правый x:
     double rightBound();
-
 }
