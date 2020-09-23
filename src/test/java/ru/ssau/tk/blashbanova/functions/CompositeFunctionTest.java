@@ -9,14 +9,14 @@ public class CompositeFunctionTest {
 
     @Test
     public void testApply() {
-
         IdentityFunction fFunction = new IdentityFunction();
         IdentityFunction gFunction = new IdentityFunction();
         TangentFunction hFunction = new TangentFunction();
+        SqrFunction sqr = new SqrFunction();
         CompositeFunction firstFunction = new CompositeFunction(fFunction, gFunction);
-        CompositeFunction secondFunction =new CompositeFunction(fFunction,hFunction);
-        assertEquals(firstFunction.apply(1),1,DELTA);
-        assertEquals(secondFunction.apply(100),1,DELTA);
-
+        CompositeFunction secondFunction = new CompositeFunction(fFunction, hFunction);
+        assertEquals(firstFunction.apply(1), 1, DELTA);
+        assertEquals(secondFunction.apply(100), 1, DELTA);
+        assertEquals(new CompositeFunction(sqr, hFunction).apply(2), 0.99932, DELTA);
     }
 }
