@@ -5,7 +5,6 @@ import org.testng.annotations.Test;
 import static org.testng.Assert.*;
 
 public class TangentFunctionTest {
-
     private final static double DELTA = 0.0001;
 
     @Test
