@@ -6,7 +6,7 @@ import static org.testng.Assert.*;
 
 public class ConstantFunctionTest {
     public static final double ACCURACY = 0.0005;
-    ConstantFunction constant = new ConstantFunction(5);
+    private final ConstantFunction constant = new ConstantFunction(5);
 
     @Test
     public void testGetConstant() {
@@ -22,5 +22,12 @@ public class ConstantFunctionTest {
         assertEquals(constant.apply(0.0), 5, ACCURACY);
         assertEquals(constant.apply(Double.NaN), 5, ACCURACY);
         assertEquals(constant.apply(Double.NEGATIVE_INFINITY), 5, ACCURACY);
+    }
+
+    @Test
+    public void testApplyNot() {
+        assertNotEquals(constant.apply(0.0), 8, ACCURACY);
+        assertNotEquals(constant.apply(Double.NaN), 8, ACCURACY);
+        assertNotEquals(constant.apply(Double.NEGATIVE_INFINITY), 8, ACCURACY);
     }
 }

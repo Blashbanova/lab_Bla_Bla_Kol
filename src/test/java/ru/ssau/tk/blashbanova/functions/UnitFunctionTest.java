@@ -6,7 +6,7 @@ import static org.testng.Assert.*;
 
 public class UnitFunctionTest {
     public static final double ACCURACY = 0.0005;
-    UnitFunction unit = new UnitFunction();
+    private final UnitFunction unit = new UnitFunction();
 
     @Test
     public void testUnitFunctionConstructor() {
@@ -18,5 +18,12 @@ public class UnitFunctionTest {
     @Test
     public void testGetConstant() {
         assertEquals(unit.getConstant(), 1, ACCURACY);
+    }
+
+    @Test
+    public void testApplyNot() {
+        assertNotEquals(unit.apply(0.0), 8, ACCURACY);
+        assertNotEquals(unit.apply(Double.NaN), 8, ACCURACY);
+        assertNotEquals(unit.apply(Double.NEGATIVE_INFINITY), 8, ACCURACY);
     }
 }

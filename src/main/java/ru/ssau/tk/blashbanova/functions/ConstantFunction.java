@@ -1,18 +1,18 @@
 package ru.ssau.tk.blashbanova.functions;
 
 public class ConstantFunction implements MathFunction {
-    private final double CONSTANT;
+    private final double constant;
 
     public ConstantFunction(double number) {
-        CONSTANT = number;
+        constant = number;
     }
 
     @Override
     public double apply(double number) {
-        return CONSTANT;
+        return constant;
     }
 
     public double getConstant() {
-        return CONSTANT;
+        return constant;
     }
 }

@@ -6,11 +6,10 @@ import static org.testng.Assert.*;
 
 public class SqrFunctionTest {
     public static final double ACCURACY = 0.0005;
-    SqrFunction sqr = new SqrFunction();
+    private final MathFunction sqr = new SqrFunction();
 
     @Test
     public void testApplyNumbers() {
-
         assertEquals(sqr.apply(-2.5), 6.25, ACCURACY);
         assertEquals(sqr.apply(0), 0, ACCURACY);
     }
