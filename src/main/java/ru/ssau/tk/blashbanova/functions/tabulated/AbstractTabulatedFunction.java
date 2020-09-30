@@ -13,6 +13,8 @@ public abstract class AbstractTabulatedFunction implements TabulatedFunction {
         return leftY + (rightY - leftY) * (x - leftX) / (rightX - leftX);
     }
 
+    protected int count;
+
     @Override
     public double apply(double x) {
         if (x < leftBound()) {

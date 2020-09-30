@@ -13,7 +13,7 @@ public interface TabulatedFunction extends MathFunction {
     double getY(int index);
 
     //Метод, задающий значение y по номеру индекса:
-    void setY(int index, double value);
+    void setY(int index, double valueY);
 
     //Метод, возвращающий индекс аргумента x. Предполагается, что все x различны. Если такого x в таблице нет, то необходимо вернуть -1:
     int indexOfX(double x);
