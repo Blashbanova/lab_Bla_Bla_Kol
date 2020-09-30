@@ -1,4 +1,6 @@
-package ru.ssau.tk.blashbanova.functions;
+package ru.ssau.tk.blashbanova.functions.math;
+
+import ru.ssau.tk.blashbanova.functions.math.MathFunction;
 
 public class ModulusFunction implements MathFunction {
     @Override

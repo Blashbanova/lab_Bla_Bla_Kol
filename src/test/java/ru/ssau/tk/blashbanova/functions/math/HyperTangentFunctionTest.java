@@ -1,6 +1,8 @@
-package ru.ssau.tk.blashbanova.functions;
+package ru.ssau.tk.blashbanova.functions.math;
 
 import org.testng.annotations.Test;
+import ru.ssau.tk.blashbanova.functions.math.HyperTangentFunction;
+import ru.ssau.tk.blashbanova.functions.math.MathFunction;
 
 import static org.testng.Assert.*;
 

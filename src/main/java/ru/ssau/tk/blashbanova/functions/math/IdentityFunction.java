@@ -1,4 +1,4 @@
-package ru.ssau.tk.blashbanova.functions;
+package ru.ssau.tk.blashbanova.functions.math;
 
 public class IdentityFunction implements MathFunction {
     @Override

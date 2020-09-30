@@ -1,4 +1,4 @@
-package ru.ssau.tk.blashbanova.functions;
+package ru.ssau.tk.blashbanova.functions.math;
 
 public class CompositeFunction implements MathFunction {
     private final MathFunction firstFunction;

@@ -1,4 +1,4 @@
-package ru.ssau.tk.blashbanova.functions;
+package ru.ssau.tk.blashbanova.functions.math;
 
 public interface MathFunction {
     double apply(double x);

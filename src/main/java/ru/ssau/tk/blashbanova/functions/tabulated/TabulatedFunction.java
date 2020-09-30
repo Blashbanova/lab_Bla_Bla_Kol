@@ -1,4 +1,6 @@
-package ru.ssau.tk.blashbanova.functions;
+package ru.ssau.tk.blashbanova.functions.tabulated;
+
+import ru.ssau.tk.blashbanova.functions.math.MathFunction;
 
 public interface TabulatedFunction extends MathFunction {
     //Метод получения количества табулированных значений:

@@ -1,6 +1,7 @@
-package ru.ssau.tk.blashbanova.functions;
+package ru.ssau.tk.blashbanova.functions.math;
 
 import org.testng.annotations.Test;
+import ru.ssau.tk.blashbanova.functions.math.UnitFunction;
 
 import static org.testng.Assert.*;
 
