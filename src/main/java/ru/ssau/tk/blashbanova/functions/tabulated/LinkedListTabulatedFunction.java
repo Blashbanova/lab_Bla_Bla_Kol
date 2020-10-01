@@ -6,6 +6,7 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction {
 
     private Node head;
     private Node last;
+    private int count=0;
 
     protected class Node {
 
@@ -16,30 +17,30 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction {
     }
 
     private void addNode(double x, double y) {
-
         Node newNode = new Node();
         if (head == null) {
             head = newNode;
             last = newNode;
+            newNode.x = x;
+            newNode.y = y;
             newNode.prev = newNode;
             newNode.next = newNode;
+
         } else {
 
-            while (last.next != null) {
-                last = last.next;
-            }
             last = head.prev;
             head.prev = newNode;
             last.next = newNode;
             newNode.prev = last;
             newNode.next = head;
+            newNode.x = x;
+            newNode.y = y;
             last = newNode;
         }
         count += 1;
     }
 
     public LinkedListTabulatedFunction(double[] xValues, double[] yValues) {
-
         for (int i = 0; i < xValues.length; i++) {
             this.addNode(xValues[i], yValues[i]);
         }
@@ -61,7 +62,7 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction {
         Node indexNode = head;
         for (int i = 0; i < count; i++) {
             if (i == index) {
-
+                return indexNode;
             }
             indexNode = indexNode.next;
         }
