@@ -23,8 +23,9 @@ public class ArrayTabulatedFunction extends AbstractTabulatedFunction {
         yValues = new double[count];
         xValues[0] = xFrom;
         yValues[count - 1] = source.apply(xTo);
+        double step = (xTo - xFrom) / (count - 1);
         for (int i = 0; i != count - 1; i++) {
-            xValues[i + 1] = xValues[i] + (xTo - xFrom) / (count - 1);
+            xValues[i + 1] = xValues[i] + step;
             yValues[i] = source.apply(xValues[i]);
         }
     }
@@ -81,15 +82,15 @@ public class ArrayTabulatedFunction extends AbstractTabulatedFunction {
 
     @Override
     public int floorIndexOfX(double x) {
-        if (x - leftBound() < 0.0005) {
+        if (x - leftBound() <= 0) {
             return 0;
         }
 
-        if (x - rightBound() > 0.0005) {
+        if (x - rightBound() > 0) {
             return count;
         }
         for (int i = 1; i != count; i++) {
-            if (x - xValues[i] <= 0.0005) {
+            if (x - xValues[i] <= 0) {
                 return i - 1;
             }
         }
