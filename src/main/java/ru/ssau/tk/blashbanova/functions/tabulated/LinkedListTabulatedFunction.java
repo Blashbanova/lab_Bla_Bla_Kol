@@ -61,10 +61,11 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction {
         Node indexNode = head;
         for (int i = 0; i < count; i++) {
             if (i == index) {
-                return indexNode;
+
             }
             indexNode = indexNode.next;
         }
+        return new Node();
     }
 
     @Override
@@ -83,8 +84,8 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction {
     }
 
     @Override
-    public void setY(int index, double valueY) {
-        valueY = getNode(index).y;
+    public void setY(int index, double value) {
+        getNode(index).y = value;
     }
 
     @Override
@@ -140,17 +141,31 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction {
 
     @Override
     protected double extrapolateLeft(double x) {
-
-        return 0;
+        Node indexNode = head;
+        return interpolate(x, leftBound(), indexNode.next.x, indexNode.y, indexNode.next.y);
     }
 
     @Override
     protected double extrapolateRight(double x) {
-        return 0;
+        Node indexNode = last;
+        return interpolate(x, indexNode.prev.x, indexNode.x, indexNode.prev.y, indexNode.y);
     }
 
     @Override
     protected double interpolate(double x, int floorIndex) {
+        Node indexNode = head;
+        if (floorIndex == 0) {
+            return extrapolateLeft(x);
+        } else if (floorIndex == count) {
+            return extrapolateRight(x);
+        } else {
+            for (int i = 0; i < count; i++) {
+                if (i == floorIndex) {
+                    return interpolate(x, indexNode.x, indexNode.next.x, indexNode.y, indexNode.next.y);
+                }
+                indexNode = indexNode.next;
+            }
+        }
         return 0;
     }
 }
