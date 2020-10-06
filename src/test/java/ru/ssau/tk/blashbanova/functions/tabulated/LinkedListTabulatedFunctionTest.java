@@ -14,6 +14,10 @@ public class LinkedListTabulatedFunctionTest {
     private final double[] xValues = new double[]{1, 3, 5, 7, 9};
     private final double[] yValues = new double[]{10, 30, 50, 70, 90};
 
+    private LinkedListTabulatedFunction getAnotherListFunction() {
+        return new LinkedListTabulatedFunction(sqr, 10, 90, 5);
+    }
+
     private LinkedListTabulatedFunction getArrayListFunction() {
         return new LinkedListTabulatedFunction(xValues, yValues);
     }
@@ -100,8 +104,8 @@ public class LinkedListTabulatedFunctionTest {
         assertEquals(getFunction().indexOfY(Double.NaN), -1);
         assertEquals(getFunction().indexOfY(5), -1);
         assertEquals(getFunction().indexOfY(-5), -1);
-        assertEquals(getArrayListFunction().indexOfX(30), 2);
-        assertNotEquals(getArrayListFunction().indexOfX(30), Double.NaN);
+        assertEquals(getArrayListFunction().indexOfX(3), 1);
+        assertNotEquals(getArrayListFunction().indexOfX(3), Double.NaN);
     }
 
     @Test
@@ -164,6 +168,7 @@ public class LinkedListTabulatedFunctionTest {
         assertEquals(testFunction.extrapolateRight(10), 10, ACCURACY);
         assertEquals(anotherFunction.extrapolateRight(7), 28.5556, ACCURACY);
         assertEquals(getArrayListFunction().extrapolateRight(12), 120, ACCURACY);
+
     }
 
     @Test
@@ -173,4 +178,12 @@ public class LinkedListTabulatedFunctionTest {
         assertEquals(getListFunction().interpolate(20, getListFunction().floorIndexOfX(20)), 257, ACCURACY);
         assertEquals(getArrayListFunction().interpolate(6, getArrayListFunction().floorIndexOfX(6)), 60, ACCURACY);
     }
+
+    @Test
+    public void testComplexFunction() {
+        assertEquals(getArrayListFunction().andThen(getAnotherListFunction()).andThen(sqr).apply(5), 6250000, ACCURACY);
+        assertEquals(getArrayListFunction().andThen(getAnotherListFunction()).andThen(sqr).apply(3), 810000, ACCURACY);
+        assertNotEquals(sqr.andThen(getAnotherListFunction()).andThen(getArrayListFunction()).apply(50), Double.NaN, ACCURACY);
+    }
 }
+
