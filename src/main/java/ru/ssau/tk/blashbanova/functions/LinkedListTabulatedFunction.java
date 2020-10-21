@@ -1,8 +1,5 @@
 package ru.ssau.tk.blashbanova.functions;
 
-import ru.ssau.tk.blashbanova.functions.AbstractTabulatedFunction;
-import ru.ssau.tk.blashbanova.functions.MathFunction;
-
 public class LinkedListTabulatedFunction extends AbstractTabulatedFunction {
     private Node head;
     private int count = 0;
@@ -18,7 +15,7 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction {
         xValues[0] = xFrom;
         final double step = (xTo - xFrom) / (count - 1);
         this.addNode(xValues[0], source.apply(xValues[0]));
-        for (int i = 1; i <= (count - 1); i++) {
+        for (int i = 1; i <= count - 1; i++) {
             xValues[i] = xValues[i - 1] + step;
             this.addNode(xValues[i], source.apply(xValues[i]));
         }
@@ -46,6 +43,14 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction {
 
     private Node getNode(int index) {
         Node indexNode = head;
+        if (index > count / 2) {
+            for (int i = count - 1; i > count / 2; i--) {
+                if (i == index) {
+                    return indexNode.prev;
+                }
+                indexNode = indexNode.prev;
+            }
+        }
         for (int i = 0; i < count; i++) {
             if (i == index) {
                 return indexNode;
@@ -122,41 +127,41 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction {
                 return i - 1;
             }
         }
-
-        return getCount();
+        return count;
     }
 
     @Override
     protected double extrapolateLeft(double x) {
-        Node indexNode = head;
-        return interpolate(x, leftBound(), indexNode.next.x, indexNode.y, indexNode.next.y);
+        if (count == 1) {
+            return head.y;
+        }
+        return interpolate(x, head.x, head.next.x, head.y, head.next.y);
     }
 
     @Override
     protected double extrapolateRight(double x) {
-        Node indexNode = head.prev;
-        return interpolate(x, indexNode.prev.x, indexNode.x, indexNode.prev.y, indexNode.y);
+        if (count == 1) {
+            return head.y;
+        }
+        return interpolate(x, head.prev.prev.x, head.prev.x, head.prev.prev.y, head.prev.y);
     }
 
     @Override
     protected double interpolate(double x, int floorIndex) {
-        Node indexNode = head;
+        if (count == 1) {
+            return head.y;
+        }
         if (floorIndex == 0) {
             return extrapolateLeft(x);
         }
         if (floorIndex == count) {
             return extrapolateRight(x);
         }
-        for (int i = 0; i < count; i++) {
-            if (i == floorIndex) {
-                return interpolate(x, indexNode.x, indexNode.next.x, indexNode.y, indexNode.next.y);
-            }
-            indexNode = indexNode.next;
-        }
-        return 0;
+        Node indexNode = getNode(floorIndex);
+        return interpolate(x, indexNode.x, indexNode.next.x, indexNode.y, indexNode.next.y);
     }
 
-    protected class Node {
+    protected static class Node {
         public Node next;
         public Node prev;
         public double x;

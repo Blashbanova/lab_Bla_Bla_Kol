@@ -1,11 +1,6 @@
 package ru.ssau.tk.blashbanova.functions;
 
-import ru.ssau.tk.blashbanova.functions.AbstractTabulatedFunction;
-import ru.ssau.tk.blashbanova.functions.MathFunction;
-
 import java.util.Arrays;
-
-import static java.lang.StrictMath.abs;
 
 public class ArrayTabulatedFunction extends AbstractTabulatedFunction {
     private double[] xValues;
