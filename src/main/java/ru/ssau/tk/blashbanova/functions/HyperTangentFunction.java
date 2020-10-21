@@ -1,4 +1,4 @@
-package ru.ssau.tk.blashbanova.functions.math;
+package ru.ssau.tk.blashbanova.functions;
 
 public class HyperTangentFunction implements MathFunction {
     @Override

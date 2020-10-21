@@ -1,6 +1,6 @@
-package ru.ssau.tk.blashbanova.functions.tabulated;
+package ru.ssau.tk.blashbanova.functions;
 
-import ru.ssau.tk.blashbanova.functions.math.MathFunction;
+import ru.ssau.tk.blashbanova.functions.MathFunction;
 
 public interface TabulatedFunction extends MathFunction {
     /**

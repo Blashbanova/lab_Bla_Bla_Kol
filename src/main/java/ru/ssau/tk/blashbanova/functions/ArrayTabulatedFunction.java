@@ -1,6 +1,7 @@
-package ru.ssau.tk.blashbanova.functions.tabulated;
+package ru.ssau.tk.blashbanova.functions;
 
-import ru.ssau.tk.blashbanova.functions.math.MathFunction;
+import ru.ssau.tk.blashbanova.functions.AbstractTabulatedFunction;
+import ru.ssau.tk.blashbanova.functions.MathFunction;
 
 import java.util.Arrays;
 
@@ -22,10 +23,10 @@ public class ArrayTabulatedFunction extends AbstractTabulatedFunction {
         xValues = new double[count];
         yValues = new double[count];
         xValues[0] = xFrom;
-        yValues[count - 1] = source.apply(xTo);
+        yValues[0] = source.apply(xFrom);
         double step = (xTo - xFrom) / (count - 1);
-        for (int i = 0; i != count - 1; i++) {
-            xValues[i + 1] = xValues[i] + step;
+        for (int i = 1; i != count; i++) {
+            xValues[i] = xValues[i - 1] + step;
             yValues[i] = source.apply(xValues[i]);
         }
     }
@@ -53,7 +54,7 @@ public class ArrayTabulatedFunction extends AbstractTabulatedFunction {
     @Override
     public int indexOfX(double x) {
         for (int i = 0; i != count; i++) {
-            if (abs(xValues[i] - x) <= 0.0005) {
+            if (x == xValues[i]) {
                 return i;
             }
         }
@@ -63,7 +64,7 @@ public class ArrayTabulatedFunction extends AbstractTabulatedFunction {
     @Override
     public int indexOfY(double y) {
         for (int i = 0; i != count; i++) {
-            if (abs(yValues[i] - y) <= 0.0005) {
+            if (y == yValues[i]) {
                 return i;
             }
         }
@@ -82,25 +83,21 @@ public class ArrayTabulatedFunction extends AbstractTabulatedFunction {
 
     @Override
     public int floorIndexOfX(double x) {
-        if (x - leftBound() <= 0) {
+        if (x < xValues[0]) {
             return 0;
         }
-
-        if (x - rightBound() > 0) {
-            return count;
-        }
-        for (int i = 1; i != count; i++) {
-            if (x - xValues[i] <= 0) {
-                return i - 1;
+        for (int i = 0; i != count - 1; i++) {
+            if (x <= xValues[i + 1]) {
+                return i;
             }
         }
-        return -1;
+        return count;
     }
 
     @Override
     public double extrapolateLeft(double x) {
         if (count == 1) {
-            return yValues[1];
+            return yValues[0];
         }
         return interpolate(x, xValues[0], xValues[1], yValues[0], yValues[1]);
     }
@@ -108,7 +105,7 @@ public class ArrayTabulatedFunction extends AbstractTabulatedFunction {
     @Override
     public double extrapolateRight(double x) {
         if (count == 1) {
-            return yValues[1];
+            return yValues[0];
         }
         return interpolate(x, xValues[count - 2], xValues[count - 1], yValues[count - 2], yValues[count - 1]);
     }
@@ -116,7 +113,7 @@ public class ArrayTabulatedFunction extends AbstractTabulatedFunction {
     @Override
     public double interpolate(double x, int floorIndex) {
         if (count == 1) {
-            return yValues[1];
+            return yValues[0];
         }
         if (floorIndex == 0) {
             return extrapolateLeft(x);

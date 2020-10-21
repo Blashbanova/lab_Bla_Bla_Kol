@@ -1,7 +1,7 @@
-package ru.ssau.tk.blashbanova.functions.math;
+package ru.ssau.tk.blashbanova.functions;
 
 import org.testng.annotations.Test;
-import ru.ssau.tk.blashbanova.functions.math.ConstantFunction;
+import ru.ssau.tk.blashbanova.functions.ConstantFunction;
 
 import static org.testng.Assert.*;
 

@@ -1,8 +1,8 @@
-package ru.ssau.tk.blashbanova.functions.math;
+package ru.ssau.tk.blashbanova.functions;
 
 import org.testng.annotations.Test;
-import ru.ssau.tk.blashbanova.functions.math.IdentityFunction;
-import ru.ssau.tk.blashbanova.functions.math.MathFunction;
+import ru.ssau.tk.blashbanova.functions.IdentityFunction;
+import ru.ssau.tk.blashbanova.functions.MathFunction;
 
 import static org.testng.Assert.*;
 

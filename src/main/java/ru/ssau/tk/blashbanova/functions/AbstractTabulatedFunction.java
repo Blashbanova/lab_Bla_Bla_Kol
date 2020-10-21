@@ -1,4 +1,4 @@
-package ru.ssau.tk.blashbanova.functions.tabulated;
+package ru.ssau.tk.blashbanova.functions;
 
 public abstract class AbstractTabulatedFunction implements TabulatedFunction {
     protected abstract int floorIndexOfX(double x);
