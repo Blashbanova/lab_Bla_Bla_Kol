@@ -1,5 +1,7 @@
 package ru.ssau.tk.blashbanova.functions;
 
+import java.util.Iterator;
+
 public class LinkedListTabulatedFunction extends AbstractTabulatedFunction {
     private Node head;
     private int count = 0;
@@ -172,5 +174,10 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction {
         public Node prev;
         public double x;
         public double y;
+    }
+
+    @Override
+    public Iterator<Point> iterator() {
+        throw new UnsupportedOperationException();
     }
 }

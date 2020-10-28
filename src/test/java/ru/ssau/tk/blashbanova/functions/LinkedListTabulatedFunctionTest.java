@@ -223,7 +223,7 @@ public class LinkedListTabulatedFunctionTest {
         assertEquals(listFunction.interpolate(4, listFunction.floorIndexOfX(4)), 17, ACCURACY);
         assertEquals(listFunction.interpolate(2, listFunction.floorIndexOfX(2)), 5, ACCURACY);
         assertEquals(listFunction.interpolate(8, listFunction.floorIndexOfX(8)), 65, ACCURACY);
-        assertEquals(unit.interpolate(3.25,unit.floorIndexOfX(3.25)), 10.625, ACCURACY);
+        assertEquals(unit.interpolate(3.25, unit.floorIndexOfX(3.25)), 10.625, ACCURACY);
         assertEquals(arrayListFunction.interpolate(6, arrayListFunction.floorIndexOfX(6)), 60, ACCURACY);
 
     }

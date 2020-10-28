@@ -2,7 +2,7 @@ package ru.ssau.tk.blashbanova.functions;
 
 import ru.ssau.tk.blashbanova.functions.MathFunction;
 
-public interface TabulatedFunction extends MathFunction {
+public interface TabulatedFunction extends MathFunction, Iterable<Point> {
     /**
      * Метод получения количества табулированных значений
      */
@@ -36,12 +36,14 @@ public interface TabulatedFunction extends MathFunction {
     int indexOfY(double y);
 
     /**
-     *Метод, возвращающий самый левый x
+     * Метод, возвращающий самый левый x
      */
     double leftBound();
 
     /**
-     *Метод, возвращающий самый правый x
+     * Метод, возвращающий самый правый x
      */
     double rightBound();
+
+
 }
