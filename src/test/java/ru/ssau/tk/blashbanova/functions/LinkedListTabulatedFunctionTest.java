@@ -1,5 +1,6 @@
 package ru.ssau.tk.blashbanova.functions;
 
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.*;
@@ -10,6 +11,8 @@ public class LinkedListTabulatedFunctionTest {
     private final double ACCURACY = 0.0001;
     private final double[] xValues = {1, 3, 5, 7, 9};
     private final double[] yValues = {10, 30, 50, 70, 90};
+    private final double[] xValues1 = {1};
+    private final double[] yValues1 = {10};
 
     private LinkedListTabulatedFunction getArrayListFunction() {
         return new LinkedListTabulatedFunction(xValues, yValues);
@@ -24,7 +27,13 @@ public class LinkedListTabulatedFunctionTest {
     }
 
     private LinkedListTabulatedFunction getOneElementFunction() {
-        return new LinkedListTabulatedFunction(sqr, 2, 4, 1);
+        return new LinkedListTabulatedFunction(sqr, 2, 4, 5);
+    }
+
+    @Test
+    public void testArgumentException() {
+        Assert.assertThrows(IllegalArgumentException.class, () -> new LinkedListTabulatedFunction(xValues1, yValues1));
+        Assert.assertThrows(IllegalArgumentException.class, () -> new LinkedListTabulatedFunction(sqr, 10, -1, 5));
     }
 
     @Test
@@ -37,7 +46,7 @@ public class LinkedListTabulatedFunctionTest {
         assertNotEquals(function.getCount(), 0);
         assertNotEquals(testFunction.getCount(), 0);
         assertEquals(function.getCount(), 5);
-        assertEquals(testFunction.getCount(), 1);
+        assertEquals(testFunction.getCount(), 5);
         assertEquals(arrayListFunction.getCount(), 5);
         assertNotEquals(arrayListFunction.getCount(), 0);
     }
@@ -54,6 +63,8 @@ public class LinkedListTabulatedFunctionTest {
         assertEquals(function.getX(4), 2, ACCURACY);
         assertEquals(arrayListFunction.getX(0), 1, ACCURACY);
         assertNotEquals(arrayListFunction.getX(2), Double.NaN);
+        Assert.assertThrows(IllegalArgumentException.class, () -> listFunction.getX(-1));
+        Assert.assertThrows(IllegalArgumentException.class, () -> listFunction.getX(6));
     }
 
     @Test
@@ -68,6 +79,8 @@ public class LinkedListTabulatedFunctionTest {
         assertEquals(function.getY(3), 1, ACCURACY);
         assertEquals(arrayListFunction.getY(3), 70, ACCURACY);
         assertNotEquals(arrayListFunction.getY(1), Double.NaN);
+        Assert.assertThrows(IllegalArgumentException.class, () -> listFunction.getY(-1));
+        Assert.assertThrows(IllegalArgumentException.class, () -> listFunction.getY(6));
     }
 
     @Test
@@ -84,6 +97,8 @@ public class LinkedListTabulatedFunctionTest {
         assertEquals(function.getY(2), 111, ACCURACY);
         assertEquals(anotherFunction.getY(3), Double.NaN);
         assertEquals(otherFunction.getY(1), 125, ACCURACY);
+        Assert.assertThrows(IllegalArgumentException.class, () -> someFunction.setY(-6, 14));
+        Assert.assertThrows(IllegalArgumentException.class, () -> otherFunction.setY(100, 125));
     }
 
     @Test
@@ -155,9 +170,8 @@ public class LinkedListTabulatedFunctionTest {
         final LinkedListTabulatedFunction function = getFunction();
         assertEquals(listFunction.floorIndexOfX(2), 0, ACCURACY);
         assertEquals(listFunction.floorIndexOfX(11), 5, ACCURACY);
-        assertEquals(listFunction.floorIndexOfX(-10), 0, ACCURACY);
         assertEquals(testFunction.floorIndexOfX(1.8), 1);
-        assertEquals(testFunction.floorIndexOfX(-1), 0);
+        Assert.assertThrows(IllegalArgumentException.class, () -> testFunction.floorIndexOfX(-1));
         assertEquals(testFunction.floorIndexOfX(6), 10);
         assertEquals(testFunction.floorIndexOfX(4.5), 7);
         assertEquals(function.floorIndexOfX(2), 3);
@@ -165,6 +179,8 @@ public class LinkedListTabulatedFunctionTest {
         assertEquals(arrayListFunction.floorIndexOfX(3), 0);
         assertEquals(arrayListFunction.floorIndexOfX(6), 2);
         assertEquals(arrayListFunction.floorIndexOfX(10), 5);
+        Assert.assertThrows(IllegalArgumentException.class, () -> listFunction.floorIndexOfX(-15));
+        Assert.assertThrows(IllegalArgumentException.class, () -> listFunction.floorIndexOfX(0));
     }
 
     @Test
@@ -175,7 +191,7 @@ public class LinkedListTabulatedFunctionTest {
         final LinkedListTabulatedFunction anotherFunction = new LinkedListTabulatedFunction(sqr, -5, 1, 10);
         final LinkedListTabulatedFunction function = getFunction();
         final LinkedListTabulatedFunction unit = getOneElementFunction();
-        assertEquals(unit.extrapolateLeft(-25), 4, ACCURACY);
+        assertEquals(unit.extrapolateLeft(-25), -117.5, ACCURACY);
         assertEquals(function.extrapolateLeft(-3), 7, ACCURACY);
         assertEquals(testFunction.extrapolateLeft(-10), -10, ACCURACY);
         assertEquals(anotherFunction.extrapolateLeft(-10), 71.6667, ACCURACY);
@@ -191,7 +207,7 @@ public class LinkedListTabulatedFunctionTest {
         final LinkedListTabulatedFunction anotherFunction = new LinkedListTabulatedFunction(sqr, -7, 3, 10);
         final LinkedListTabulatedFunction function = getFunction();
         final LinkedListTabulatedFunction unit = getOneElementFunction();
-        assertEquals(unit.extrapolateRight(2502), 4, ACCURACY);
+        assertEquals(unit.extrapolateRight(25), 173.5, ACCURACY);
         assertEquals(function.extrapolateRight(4), 10, ACCURACY);
         assertEquals(testFunction.extrapolateRight(10), 10, ACCURACY);
         assertEquals(anotherFunction.extrapolateRight(7), 28.5556, ACCURACY);
@@ -204,11 +220,12 @@ public class LinkedListTabulatedFunctionTest {
         final LinkedListTabulatedFunction listFunction = getListFunction();
         final LinkedListTabulatedFunction arrayListFunction = getArrayListFunction();
         final LinkedListTabulatedFunction unit = getOneElementFunction();
-        assertEquals(unit.interpolate(0, 0), 4, ACCURACY);
+        assertEquals(listFunction.interpolate(4, listFunction.floorIndexOfX(4)), 17, ACCURACY);
         assertEquals(listFunction.interpolate(2, listFunction.floorIndexOfX(2)), 5, ACCURACY);
-        assertEquals(listFunction.interpolate(0, listFunction.floorIndexOfX(0)), -3, ACCURACY);
-        assertEquals(listFunction.interpolate(20, listFunction.floorIndexOfX(20)), 257, ACCURACY);
+        assertEquals(listFunction.interpolate(8, listFunction.floorIndexOfX(8)), 65, ACCURACY);
+        assertEquals(unit.interpolate(3.25,unit.floorIndexOfX(3.25)), 10.625, ACCURACY);
         assertEquals(arrayListFunction.interpolate(6, arrayListFunction.floorIndexOfX(6)), 60, ACCURACY);
+
     }
 }
 
