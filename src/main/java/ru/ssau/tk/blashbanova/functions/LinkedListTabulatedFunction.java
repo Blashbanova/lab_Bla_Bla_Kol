@@ -1,5 +1,7 @@
 package ru.ssau.tk.blashbanova.functions;
 
+import ru.ssau.tk.blashbanova.exceptions.InterpolationException;
+
 import java.util.Iterator;
 
 public class LinkedListTabulatedFunction extends AbstractTabulatedFunction {
@@ -10,6 +12,8 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction {
         if (xValues.length < 2) {
             throw new IllegalArgumentException("Less than minimum length");
         }
+        AbstractTabulatedFunction.checkLengthIsTheSame(xValues, yValues);
+        AbstractTabulatedFunction.checkSorted(xValues);
         for (int i = 0; i < xValues.length; i++) {
             this.addNode(xValues[i], yValues[i]);
         }
@@ -166,6 +170,9 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction {
     @Override
     protected double interpolate(double x, int floorIndex) {
         Node indexNode = getNode(floorIndex);
+        if (x > indexNode.next.x || x < indexNode.x) {
+            throw new InterpolationException("Value is out of bounds of the interpolation interval!");
+        }
         return interpolate(x, indexNode.x, indexNode.next.x, indexNode.y, indexNode.next.y);
     }
 

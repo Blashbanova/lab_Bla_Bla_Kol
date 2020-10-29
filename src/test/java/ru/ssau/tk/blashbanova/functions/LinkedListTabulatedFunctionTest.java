@@ -2,6 +2,9 @@ package ru.ssau.tk.blashbanova.functions;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;
+import ru.ssau.tk.blashbanova.exceptions.ArrayIsNotSortedException;
+import ru.ssau.tk.blashbanova.exceptions.DifferentLengthOfArraysException;
+import ru.ssau.tk.blashbanova.exceptions.InterpolationException;
 
 import static org.testng.Assert.*;
 
@@ -26,8 +29,14 @@ public class LinkedListTabulatedFunctionTest {
         return new LinkedListTabulatedFunction(sqr, -2, 2, 5);
     }
 
-    private LinkedListTabulatedFunction getOneElementFunction() {
-        return new LinkedListTabulatedFunction(sqr, 2, 4, 5);
+
+    @Test
+    public void testConstructorExceptions() {
+        final double[] brokenValues = {1, -1, 0};
+        final double[] singleElementArray = {1};
+        assertThrows(IllegalArgumentException.class, () -> new LinkedListTabulatedFunction(singleElementArray, yValues));
+        assertThrows(DifferentLengthOfArraysException.class, () -> new LinkedListTabulatedFunction(brokenValues, yValues));
+        assertThrows(ArrayIsNotSortedException.class, () -> new LinkedListTabulatedFunction(brokenValues, brokenValues));
     }
 
     @Test
@@ -39,14 +48,11 @@ public class LinkedListTabulatedFunctionTest {
     @Test
     public void testGetCount() {
         final LinkedListTabulatedFunction listFunction = getListFunction();
-        final LinkedListTabulatedFunction testFunction = getOneElementFunction();
         final LinkedListTabulatedFunction function = getFunction();
         final LinkedListTabulatedFunction arrayListFunction = getArrayListFunction();
         assertEquals(listFunction.getCount(), 5);
         assertNotEquals(function.getCount(), 0);
-        assertNotEquals(testFunction.getCount(), 0);
         assertEquals(function.getCount(), 5);
-        assertEquals(testFunction.getCount(), 5);
         assertEquals(arrayListFunction.getCount(), 5);
         assertNotEquals(arrayListFunction.getCount(), 0);
     }
@@ -190,8 +196,6 @@ public class LinkedListTabulatedFunctionTest {
         final LinkedListTabulatedFunction testFunction = new LinkedListTabulatedFunction(identityFunction, -5, 5, 20);
         final LinkedListTabulatedFunction anotherFunction = new LinkedListTabulatedFunction(sqr, -5, 1, 10);
         final LinkedListTabulatedFunction function = getFunction();
-        final LinkedListTabulatedFunction unit = getOneElementFunction();
-        assertEquals(unit.extrapolateLeft(-25), -117.5, ACCURACY);
         assertEquals(function.extrapolateLeft(-3), 7, ACCURACY);
         assertEquals(testFunction.extrapolateLeft(-10), -10, ACCURACY);
         assertEquals(anotherFunction.extrapolateLeft(-10), 71.6667, ACCURACY);
@@ -206,8 +210,6 @@ public class LinkedListTabulatedFunctionTest {
         final LinkedListTabulatedFunction testFunction = new LinkedListTabulatedFunction(identityFunction, -5, 5, 20);
         final LinkedListTabulatedFunction anotherFunction = new LinkedListTabulatedFunction(sqr, -7, 3, 10);
         final LinkedListTabulatedFunction function = getFunction();
-        final LinkedListTabulatedFunction unit = getOneElementFunction();
-        assertEquals(unit.extrapolateRight(25), 173.5, ACCURACY);
         assertEquals(function.extrapolateRight(4), 10, ACCURACY);
         assertEquals(testFunction.extrapolateRight(10), 10, ACCURACY);
         assertEquals(anotherFunction.extrapolateRight(7), 28.5556, ACCURACY);
@@ -219,13 +221,18 @@ public class LinkedListTabulatedFunctionTest {
     public void testInterpolate() {
         final LinkedListTabulatedFunction listFunction = getListFunction();
         final LinkedListTabulatedFunction arrayListFunction = getArrayListFunction();
-        final LinkedListTabulatedFunction unit = getOneElementFunction();
         assertEquals(listFunction.interpolate(4, listFunction.floorIndexOfX(4)), 17, ACCURACY);
         assertEquals(listFunction.interpolate(2, listFunction.floorIndexOfX(2)), 5, ACCURACY);
         assertEquals(listFunction.interpolate(8, listFunction.floorIndexOfX(8)), 65, ACCURACY);
-        assertEquals(unit.interpolate(3.25, unit.floorIndexOfX(3.25)), 10.625, ACCURACY);
         assertEquals(arrayListFunction.interpolate(6, arrayListFunction.floorIndexOfX(6)), 60, ACCURACY);
 
+    }
+
+    @Test
+    public void testInterpolateException() {
+        final LinkedListTabulatedFunction function = getFunction();
+        assertThrows(InterpolationException.class, () -> function.interpolate(2, function.floorIndexOfX(-2)));
+        assertThrows(InterpolationException.class, () -> function.interpolate(0, function.floorIndexOfX(2)));
     }
 }
 

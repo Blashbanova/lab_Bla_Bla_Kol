@@ -1,5 +1,7 @@
 package ru.ssau.tk.blashbanova.functions;
 
+import ru.ssau.tk.blashbanova.exceptions.InterpolationException;
+
 import java.util.Arrays;
 import java.util.Iterator;
 
@@ -9,12 +11,20 @@ public class ArrayTabulatedFunction extends AbstractTabulatedFunction {
     private final int count;
 
     public ArrayTabulatedFunction(double[] xValues, double[] yValues) {
+        if (xValues.length < 2) {
+            throw new IllegalArgumentException("Less than minimum length");
+        }
+        AbstractTabulatedFunction.checkLengthIsTheSame(xValues, yValues);
+        AbstractTabulatedFunction.checkSorted(xValues);
         count = xValues.length;
         this.xValues = Arrays.copyOf(xValues, count);
         this.yValues = Arrays.copyOf(yValues, count);
     }
 
     public ArrayTabulatedFunction(MathFunction source, double xFrom, double xTo, int count) {
+        if (xFrom > xTo) {
+            throw new IllegalArgumentException("Incorrect data");
+        }
         this.count = count;
         xValues = new double[count];
         yValues = new double[count];
@@ -92,30 +102,18 @@ public class ArrayTabulatedFunction extends AbstractTabulatedFunction {
 
     @Override
     public double extrapolateLeft(double x) {
-        if (count == 1) {
-            return yValues[0];
-        }
         return interpolate(x, xValues[0], xValues[1], yValues[0], yValues[1]);
     }
 
     @Override
     public double extrapolateRight(double x) {
-        if (count == 1) {
-            return yValues[0];
-        }
         return interpolate(x, xValues[count - 2], xValues[count - 1], yValues[count - 2], yValues[count - 1]);
     }
 
     @Override
     public double interpolate(double x, int floorIndex) {
-        if (count == 1) {
-            return yValues[0];
-        }
-        if (floorIndex == 0) {
-            return extrapolateLeft(x);
-        }
-        if (floorIndex == count) {
-            return extrapolateRight(x);
+        if (x > xValues[floorIndex + 1] || x < xValues[floorIndex]) {
+            throw new InterpolationException("Value is out of bounds of the interpolation interval!");
         }
         return interpolate(x, xValues[floorIndex], xValues[floorIndex + 1], yValues[floorIndex], yValues[floorIndex + 1]);
     }

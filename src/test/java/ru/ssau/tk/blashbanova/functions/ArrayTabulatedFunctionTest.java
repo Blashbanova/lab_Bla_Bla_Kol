@@ -1,6 +1,9 @@
 package ru.ssau.tk.blashbanova.functions;
 
 import org.testng.annotations.Test;
+import ru.ssau.tk.blashbanova.exceptions.ArrayIsNotSortedException;
+import ru.ssau.tk.blashbanova.exceptions.DifferentLengthOfArraysException;
+import ru.ssau.tk.blashbanova.exceptions.InterpolationException;
 
 import static org.testng.Assert.*;
 
@@ -27,8 +30,13 @@ public class ArrayTabulatedFunctionTest {
         return new ArrayTabulatedFunction(identityFunction, 1, Double.NaN, 3);
     }
 
-    private ArrayTabulatedFunction getOneElementFunction() {
-        return new ArrayTabulatedFunction(sqr, 2, 4, 1);
+    @Test
+    public void testConstructorExceptions() {
+        final double[] brokenValues = {1, -1, 0};
+        final double[] singleElementArray = {1};
+        assertThrows(IllegalArgumentException.class, () -> new ArrayTabulatedFunction(singleElementArray, yValues));
+        assertThrows(DifferentLengthOfArraysException.class, () -> new ArrayTabulatedFunction(brokenValues, yValues));
+        assertThrows(ArrayIsNotSortedException.class, () -> new ArrayTabulatedFunction(brokenValues, brokenValues));
     }
 
     @Test
@@ -205,9 +213,7 @@ public class ArrayTabulatedFunctionTest {
         final ArrayTabulatedFunction anotherFunction = new ArrayTabulatedFunction(sqr, -5, 1, 10);
         final ArrayTabulatedFunction function = getFunction();
         final ArrayTabulatedFunction arrayTabulatedFunction = getArrayFunction();
-        final ArrayTabulatedFunction unit = getOneElementFunction();
         assertEquals(function.extrapolateLeft(-3), 7, ACCURACY);
-        assertEquals(unit.extrapolateLeft(-25), 4, ACCURACY);
         assertEquals(arrayTabulatedFunction.extrapolateLeft(-3), 7, ACCURACY);
         assertEquals(testFunction.extrapolateLeft(-10), -10, ACCURACY);
         assertEquals(anotherFunction.extrapolateLeft(-10), 71.6667, ACCURACY);
@@ -219,8 +225,6 @@ public class ArrayTabulatedFunctionTest {
         final ArrayTabulatedFunction anotherFunction = new ArrayTabulatedFunction(sqr, -7, 3, 10);
         final ArrayTabulatedFunction function = getFunction();
         final ArrayTabulatedFunction arrayTabulatedFunction = getArrayFunction();
-        final ArrayTabulatedFunction unit = getOneElementFunction();
-        assertEquals(unit.extrapolateRight(-5), 4, ACCURACY);
         assertEquals(function.extrapolateRight(4), 10, ACCURACY);
         assertEquals(arrayTabulatedFunction.extrapolateRight(4), 10, ACCURACY);
         assertEquals(testFunction.extrapolateRight(10), 10, ACCURACY);
@@ -229,16 +233,18 @@ public class ArrayTabulatedFunctionTest {
 
     @Test
     public void testInterpolate() {
-        final ArrayTabulatedFunction anotherFunction = new ArrayTabulatedFunction(sqr, -7, 3, 10);
         final ArrayTabulatedFunction testFunction = new ArrayTabulatedFunction(sqr, -5, 1, 10);
         final ArrayTabulatedFunction function = getFunction();
-        final ArrayTabulatedFunction unit = getOneElementFunction();
         final ArrayTabulatedFunction arrayTabulatedFunction = getArrayFunction();
-        assertEquals(unit.interpolate(12, unit.floorIndexOfX(12)), 4, ACCURACY);
-        assertEquals(anotherFunction.interpolate(7, anotherFunction.floorIndexOfX(7)), 28.5556, ACCURACY);
-        assertEquals(testFunction.interpolate(-10, testFunction.floorIndexOfX(-10)), 71.6667, ACCURACY);
         assertEquals(function.interpolate(-0.5, function.floorIndexOfX(-0.5)), 0.5, ACCURACY);
         assertEquals(arrayTabulatedFunction.interpolate(-0.5, arrayTabulatedFunction.floorIndexOfX(-0.5)), 0.5, ACCURACY);
         assertEquals(testFunction.interpolate(-2.5, testFunction.floorIndexOfX(-2.5)), 6.3335, ACCURACY);
+    }
+
+    @Test
+    public void testInterpolateException() {
+        final ArrayTabulatedFunction function = getFunction();
+        assertThrows(InterpolationException.class, () -> function.interpolate(2, function.floorIndexOfX(-2)));
+        assertThrows(InterpolationException.class, () -> function.interpolate(0, function.floorIndexOfX(2)));
     }
 }
