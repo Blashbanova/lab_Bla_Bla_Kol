@@ -6,6 +6,8 @@ import ru.ssau.tk.blashbanova.exceptions.ArrayIsNotSortedException;
 import ru.ssau.tk.blashbanova.exceptions.DifferentLengthOfArraysException;
 import ru.ssau.tk.blashbanova.exceptions.InterpolationException;
 
+import java.util.Iterator;
+
 import static org.testng.Assert.*;
 
 public class LinkedListTabulatedFunctionTest {
@@ -233,6 +235,45 @@ public class LinkedListTabulatedFunctionTest {
         final LinkedListTabulatedFunction function = getFunction();
         assertThrows(InterpolationException.class, () -> function.interpolate(2, function.floorIndexOfX(-2)));
         assertThrows(InterpolationException.class, () -> function.interpolate(0, function.floorIndexOfX(2)));
+    }
+
+    @Test
+    public void testIteratorWhile() {
+        final LinkedListTabulatedFunction function = getArrayListFunction();
+        final Iterator<Point> iterator = function.iterator();
+        final LinkedListTabulatedFunction scaryFunction = getListFunction();
+        final Iterator<Point> secondIterator = scaryFunction.iterator();
+        int i = 0;
+        while (iterator.hasNext()) {
+            Point point = iterator.next();
+            assertEquals(point.x, function.getX(i), ACCURACY);
+            assertEquals(point.y, function.getY(i++), ACCURACY);
+        }
+        assertEquals(i, function.getCount());
+        i = 0;
+        while (secondIterator.hasNext()) {
+            Point point = secondIterator.next();
+            assertEquals(point.x, scaryFunction.getX(i), ACCURACY);
+            assertEquals(point.y, scaryFunction.getY(i++), ACCURACY);
+        }
+    }
+
+    @Test
+    public void testIteratorForEach() {
+        final LinkedListTabulatedFunction function = getArrayListFunction();
+        final Iterator<Point> iterator = function.iterator();
+        final LinkedListTabulatedFunction scaryFunction = getListFunction();
+        final Iterator<Point> secondIterator = scaryFunction.iterator();
+        for (Point point : function) {
+            Point iteratorPoint = iterator.next();
+            assertEquals(iteratorPoint.x, point.x, ACCURACY);
+            assertEquals(iteratorPoint.y, point.y, ACCURACY);
+        }
+        for (Point point : scaryFunction) {
+            Point iteratorPoint = secondIterator.next();
+            assertEquals(iteratorPoint.x, point.x, ACCURACY);
+            assertEquals(iteratorPoint.y, point.y, ACCURACY);
+        }
     }
 }
 
