@@ -82,25 +82,16 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction {
 
     @Override
     public double getX(int index) {
-        if (index < 0 || index > count - 1) {
-            throw new IllegalArgumentException("Incorrect index entered");
-        }
         return getNode(index).x;
     }
 
     @Override
     public double getY(int index) {
-        if (index < 0 || index > count - 1) {
-            throw new IllegalArgumentException("Incorrect index entered");
-        }
         return getNode(index).y;
     }
 
     @Override
     public void setY(int index, double value) {
-        if (index < 0 || index > count - 1) {
-            throw new IllegalArgumentException("Incorrect index entered");
-        }
         getNode(index).y = value;
     }
 

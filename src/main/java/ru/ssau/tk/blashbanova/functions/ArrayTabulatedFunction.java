@@ -91,7 +91,7 @@ public class ArrayTabulatedFunction extends AbstractTabulatedFunction {
     @Override
     public int floorIndexOfX(double x) {
         if (x < xValues[0]) {
-            return 0;
+            throw new IllegalArgumentException("X is less than the left border");
         }
         for (int i = 0; i != count - 1; i++) {
             if (x <= xValues[i + 1]) {

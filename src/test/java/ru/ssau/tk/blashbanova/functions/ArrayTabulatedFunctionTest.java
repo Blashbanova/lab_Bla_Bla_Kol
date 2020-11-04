@@ -1,5 +1,6 @@
 package ru.ssau.tk.blashbanova.functions;
 
+import org.testng.Assert;
 import org.testng.annotations.Test;
 import ru.ssau.tk.blashbanova.exceptions.ArrayIsNotSortedException;
 import ru.ssau.tk.blashbanova.exceptions.DifferentLengthOfArraysException;
@@ -59,6 +60,8 @@ public class ArrayTabulatedFunctionTest {
         assertNotEquals(function.getX(0), Double.NaN);
         assertNotEquals(function.getX(4), Double.NaN);
         assertEquals(function.getX(1), -1, ACCURACY);
+        Assert.assertThrows(ArrayIndexOutOfBoundsException.class, () -> function.getX(-3));
+        Assert.assertThrows(ArrayIndexOutOfBoundsException.class, () -> function.getX(-5));
         assertEquals(function.getX(4), 2, ACCURACY);
     }
 
@@ -82,6 +85,8 @@ public class ArrayTabulatedFunctionTest {
         assertNotEquals(function.getY(0), Double.NaN);
         assertEquals(function.getY(2), 0, ACCURACY);
         assertEquals(function.getY(3), 1, ACCURACY);
+        Assert.assertThrows(ArrayIndexOutOfBoundsException.class, () -> function.getY(-5));
+        Assert.assertThrows(ArrayIndexOutOfBoundsException.class, () -> testFunction.getY(-1));
     }
 
     @Test
@@ -101,6 +106,8 @@ public class ArrayTabulatedFunctionTest {
         anotherFunction.setY(3, Double.NaN);
         assertEquals(function.getY(2), 111, ACCURACY);
         assertEquals(anotherFunction.getY(3), Double.NaN);
+        Assert.assertThrows(ArrayIndexOutOfBoundsException.class, () -> function.getY(-5));
+        Assert.assertThrows(ArrayIndexOutOfBoundsException.class, () -> anotherFunction.getY(100));
     }
 
     @Test
@@ -191,11 +198,11 @@ public class ArrayTabulatedFunctionTest {
         final ArrayTabulatedFunction function = getFunction();
         final ArrayTabulatedFunction arrayTabulatedFunction = getArrayFunction();
         assertEquals(testFunction.floorIndexOfX(1.8), 1);
-        assertEquals(testFunction.floorIndexOfX(-1), 0);
+        Assert.assertThrows(IllegalArgumentException.class, () -> testFunction.floorIndexOfX(-1));
         assertEquals(testFunction.floorIndexOfX(6), 10);
         assertEquals(testFunction.floorIndexOfX(4.5), 7);
         assertEquals(function.floorIndexOfX(4), 5);
-        assertEquals(function.floorIndexOfX(-3), 0);
+        Assert.assertThrows(IllegalArgumentException.class, () -> function.floorIndexOfX(-3));
         assertEquals(arrayTabulatedFunction.floorIndexOfX(2), 3);
         assertEquals(arrayTabulatedFunction.floorIndexOfX(-2), 0);
     }
@@ -205,8 +212,8 @@ public class ArrayTabulatedFunctionTest {
         final ArrayTabulatedFunction anotherFunction = getLeftBoundNaNFunction();
         final ArrayTabulatedFunction someFunction = getRightBoundNaNFunction();
         assertEquals(anotherFunction.floorIndexOfX(3), 3);
-        assertEquals(someFunction.floorIndexOfX(-4), 0);
-        assertEquals(someFunction.floorIndexOfX(-3), 0);
+        Assert.assertThrows(IllegalArgumentException.class, () -> someFunction.floorIndexOfX(-4));
+        Assert.assertThrows(IllegalArgumentException.class, () -> someFunction.floorIndexOfX(-3));
     }
 
     @Test
