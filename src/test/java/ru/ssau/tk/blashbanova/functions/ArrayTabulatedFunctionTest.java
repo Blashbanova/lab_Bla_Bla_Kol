@@ -7,6 +7,7 @@ import ru.ssau.tk.blashbanova.exceptions.DifferentLengthOfArraysException;
 import ru.ssau.tk.blashbanova.exceptions.InterpolationException;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 import static org.testng.Assert.*;
 
@@ -72,6 +73,8 @@ public class ArrayTabulatedFunctionTest {
         assertNotEquals(arrayTabulatedFunction.getX(4), Double.NaN);
         assertEquals(arrayTabulatedFunction.getX(1), -1, ACCURACY);
         assertEquals(arrayTabulatedFunction.getX(4), 2, ACCURACY);
+        Assert.assertThrows(ArrayIndexOutOfBoundsException.class, () -> arrayTabulatedFunction.getX(100));
+        Assert.assertThrows(ArrayIndexOutOfBoundsException.class, () -> arrayTabulatedFunction.getX(-5));
     }
 
     @Test
@@ -96,6 +99,8 @@ public class ArrayTabulatedFunctionTest {
         assertNotEquals(arrayTabulatedFunction.getY(0), Double.NaN);
         assertEquals(arrayTabulatedFunction.getY(2), 0, ACCURACY);
         assertEquals(arrayTabulatedFunction.getY(3), 1, ACCURACY);
+        Assert.assertThrows(ArrayIndexOutOfBoundsException.class, () -> arrayTabulatedFunction.getY(50));
+        Assert.assertThrows(ArrayIndexOutOfBoundsException.class, () -> arrayTabulatedFunction.getY(-5));
     }
 
     @Test
@@ -106,8 +111,8 @@ public class ArrayTabulatedFunctionTest {
         anotherFunction.setY(3, Double.NaN);
         assertEquals(function.getY(2), 111, ACCURACY);
         assertEquals(anotherFunction.getY(3), Double.NaN);
-        Assert.assertThrows(ArrayIndexOutOfBoundsException.class, () -> function.getY(-5));
-        Assert.assertThrows(ArrayIndexOutOfBoundsException.class, () -> anotherFunction.getY(100));
+        Assert.assertThrows(ArrayIndexOutOfBoundsException.class, () -> function.setY(-5, 100));
+        Assert.assertThrows(ArrayIndexOutOfBoundsException.class, () -> anotherFunction.setY(100, 7));
     }
 
     @Test
@@ -118,6 +123,7 @@ public class ArrayTabulatedFunctionTest {
         anotherArrayFunction.setY(3, Double.NaN);
         assertEquals(arrayFunction.getY(2), 111, ACCURACY);
         assertEquals(anotherArrayFunction.getY(3), Double.NaN);
+        Assert.assertThrows(ArrayIndexOutOfBoundsException.class, () -> arrayFunction.setY(-5, 10));
     }
 
     @Test
@@ -270,12 +276,15 @@ public class ArrayTabulatedFunctionTest {
             assertEquals(point.y, yValues[i++], ACCURACY);
         }
         assertEquals(i, function.getCount());
+        assertThrows(NoSuchElementException.class, iterator::next);
         i = 0;
         while (secondIterator.hasNext()) {
             Point point = secondIterator.next();
             assertEquals(point.x, scaryFunction.getX(i), ACCURACY);
             assertEquals(point.y, scaryFunction.getY(i++), ACCURACY);
         }
+        assertEquals(i, scaryFunction.getCount());
+        assertThrows(NoSuchElementException.class, iterator::next);
     }
 
     @Test
@@ -284,15 +293,23 @@ public class ArrayTabulatedFunctionTest {
         final Iterator<Point> iterator = function.iterator();
         final ArrayTabulatedFunction scaryFunction = getRightBoundNaNFunction();
         final Iterator<Point> secondIterator = scaryFunction.iterator();
+        int i = 0;
         for (Point point : function) {
             Point iteratorPoint = iterator.next();
             assertEquals(iteratorPoint.x, point.x, ACCURACY);
             assertEquals(iteratorPoint.y, point.y, ACCURACY);
+            i++;
         }
+        assertEquals(i, function.getCount());
+        assertThrows(NoSuchElementException.class, iterator::next);
+        i = 0;
         for (Point point : scaryFunction) {
             Point iteratorPoint = secondIterator.next();
             assertEquals(iteratorPoint.x, point.x, ACCURACY);
             assertEquals(iteratorPoint.y, point.y, ACCURACY);
+            i++;
         }
+        assertEquals(i, scaryFunction.getCount());
+        assertThrows(NoSuchElementException.class, iterator::next);
     }
 }

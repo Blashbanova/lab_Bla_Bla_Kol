@@ -7,6 +7,7 @@ import ru.ssau.tk.blashbanova.exceptions.DifferentLengthOfArraysException;
 import ru.ssau.tk.blashbanova.exceptions.InterpolationException;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 import static org.testng.Assert.*;
 
@@ -250,12 +251,15 @@ public class LinkedListTabulatedFunctionTest {
             assertEquals(point.y, function.getY(i++), ACCURACY);
         }
         assertEquals(i, function.getCount());
+        assertThrows(NoSuchElementException.class, iterator::next);
         i = 0;
         while (secondIterator.hasNext()) {
             Point point = secondIterator.next();
             assertEquals(point.x, scaryFunction.getX(i), ACCURACY);
             assertEquals(point.y, scaryFunction.getY(i++), ACCURACY);
         }
+        assertEquals(i, scaryFunction.getCount());
+        assertThrows(NoSuchElementException.class, iterator::next);
     }
 
     @Test
@@ -264,16 +268,24 @@ public class LinkedListTabulatedFunctionTest {
         final Iterator<Point> iterator = function.iterator();
         final LinkedListTabulatedFunction scaryFunction = getListFunction();
         final Iterator<Point> secondIterator = scaryFunction.iterator();
+        int i = 0;
         for (Point point : function) {
             Point iteratorPoint = iterator.next();
             assertEquals(iteratorPoint.x, point.x, ACCURACY);
             assertEquals(iteratorPoint.y, point.y, ACCURACY);
+            i++;
         }
+        assertEquals(i, function.getCount());
+        assertThrows(NoSuchElementException.class, iterator::next);
+        i = 0;
         for (Point point : scaryFunction) {
             Point iteratorPoint = secondIterator.next();
             assertEquals(iteratorPoint.x, point.x, ACCURACY);
             assertEquals(iteratorPoint.y, point.y, ACCURACY);
+            i++;
         }
+        assertEquals(i, scaryFunction.getCount());
+        assertThrows(NoSuchElementException.class, iterator::next);
     }
 }
 
