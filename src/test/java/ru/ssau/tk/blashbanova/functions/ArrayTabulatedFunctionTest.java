@@ -41,6 +41,7 @@ public class ArrayTabulatedFunctionTest {
         assertThrows(IllegalArgumentException.class, () -> new ArrayTabulatedFunction(singleElementArray, yValues));
         assertThrows(DifferentLengthOfArraysException.class, () -> new ArrayTabulatedFunction(brokenValues, yValues));
         assertThrows(ArrayIsNotSortedException.class, () -> new ArrayTabulatedFunction(brokenValues, brokenValues));
+        assertThrows(IllegalArgumentException.class, () -> new ArrayTabulatedFunction(sqr, 5, -5, 2));
     }
 
     @Test
@@ -284,7 +285,7 @@ public class ArrayTabulatedFunctionTest {
             assertEquals(point.y, scaryFunction.getY(i++), ACCURACY);
         }
         assertEquals(i, scaryFunction.getCount());
-        assertThrows(NoSuchElementException.class, iterator::next);
+        assertThrows(NoSuchElementException.class, secondIterator::next);
     }
 
     @Test
@@ -310,6 +311,6 @@ public class ArrayTabulatedFunctionTest {
             i++;
         }
         assertEquals(i, scaryFunction.getCount());
-        assertThrows(NoSuchElementException.class, iterator::next);
+        assertThrows(NoSuchElementException.class, secondIterator::next);
     }
 }

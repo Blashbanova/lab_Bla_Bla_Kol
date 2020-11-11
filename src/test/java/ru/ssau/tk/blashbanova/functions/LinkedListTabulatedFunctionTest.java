@@ -259,7 +259,7 @@ public class LinkedListTabulatedFunctionTest {
             assertEquals(point.y, scaryFunction.getY(i++), ACCURACY);
         }
         assertEquals(i, scaryFunction.getCount());
-        assertThrows(NoSuchElementException.class, iterator::next);
+        assertThrows(NoSuchElementException.class, secondIterator::next);
     }
 
     @Test
@@ -285,7 +285,7 @@ public class LinkedListTabulatedFunctionTest {
             i++;
         }
         assertEquals(i, scaryFunction.getCount());
-        assertThrows(NoSuchElementException.class, iterator::next);
+        assertThrows(NoSuchElementException.class, secondIterator::next);
     }
 }
 
