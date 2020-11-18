@@ -44,6 +44,4 @@ public interface TabulatedFunction extends MathFunction, Iterable<Point> {
      * Метод, возвращающий самый правый x
      */
     double rightBound();
-
-
 }
