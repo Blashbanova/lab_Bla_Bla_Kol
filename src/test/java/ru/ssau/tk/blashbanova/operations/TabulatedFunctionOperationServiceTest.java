@@ -104,6 +104,7 @@ public class TabulatedFunctionOperationServiceTest {
         final ArrayTabulatedFunction brokenFunction = getLeftBoundNaNFunction();
         final LinkedListTabulatedFunction listFunction = getLinkedListTabulatedFunction();
         final LinkedListTabulatedFunction anotherListFunction = getListFunction();
+
         final TabulatedFunction arraySum = arrayOperation.sum(arrayFunction, anotherArrayFunction);
         final TabulatedFunction arrayAndListSum = listOperation.sum(arrayFunction, listFunction);
         final TabulatedFunction listSum = arrayOperation.sum(anotherListFunction, anotherListFunction);
@@ -138,6 +139,7 @@ public class TabulatedFunctionOperationServiceTest {
         final ArrayTabulatedFunction brokenFunction = getLeftBoundNaNFunction();
         final LinkedListTabulatedFunction listFunction = getLinkedListTabulatedFunction();
         final LinkedListTabulatedFunction anotherListFunction = getListFunction();
+
         final TabulatedFunction arraySubtract = arrayOperation.subtract(arrayFunction, anotherArrayFunction);
         final TabulatedFunction arrayAndListSubtract = listOperation.subtract(arrayFunction, listFunction);
         final TabulatedFunction listSubtract = listOperation.subtract(anotherListFunction, anotherListFunction);
