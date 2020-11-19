@@ -7,3 +7,4 @@ public interface MathFunction {
         return new CompositeFunction(this, afterFunction);
     }
 }
+

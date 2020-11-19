@@ -164,4 +164,72 @@ public class TabulatedFunctionOperationServiceTest {
             i++;
         }
     }
+
+    @Test
+    public void testMultiply() {
+        final TabulatedFunctionOperationService arrayOperation = getArrayOperationService();
+        final TabulatedFunctionOperationService listOperation = getListOperationService();
+        final ArrayTabulatedFunction arrayFunction = getArrayTabulatedFunction();
+        final ArrayTabulatedFunction anotherArrayFunction = getFunction();
+        final ArrayTabulatedFunction brokenFunction = getLeftBoundNaNFunction();
+        final LinkedListTabulatedFunction listFunction = getLinkedListTabulatedFunction();
+        final LinkedListTabulatedFunction anotherListFunction = getListFunction();
+        final TabulatedFunction arrayMultiply = arrayOperation.multiply(arrayFunction, anotherArrayFunction);
+        final TabulatedFunction arrayAndListMultiply = listOperation.multiply(arrayFunction, listFunction);
+        final TabulatedFunction listMultiply = listOperation.multiply(anotherListFunction, anotherListFunction);
+        assertThrows(InconsistentFunctionsException.class, () -> arrayOperation.multiply(arrayFunction, brokenFunction));
+        assertThrows(InconsistentFunctionsException.class, () -> listOperation.multiply(arrayFunction, anotherListFunction));
+        int i = 0;
+        for (Point point : arrayMultiply) {
+            assertEquals(arrayFunction.getX(i), point.x);
+            assertEquals(arrayFunction.getY(i) * anotherArrayFunction.getY(i), point.y);
+            i++;
+        }
+        i = 0;
+        for (Point point : listMultiply) {
+            assertEquals(anotherListFunction.getX(i), point.x);
+            assertEquals(anotherListFunction.getY(i) * anotherListFunction.getY(i), point.y);
+            i++;
+        }
+        i = 0;
+        for (Point point : arrayAndListMultiply) {
+            assertEquals(arrayFunction.getX(i), point.x);
+            assertEquals(arrayFunction.getY(i) * listFunction.getY(i), point.y);
+            i++;
+        }
+    }
+
+    @Test
+    public void testDivide() {
+        final TabulatedFunctionOperationService arrayOperation = getArrayOperationService();
+        final TabulatedFunctionOperationService listOperation = getListOperationService();
+        final ArrayTabulatedFunction arrayFunction = getArrayTabulatedFunction();
+        final ArrayTabulatedFunction anotherArrayFunction = getFunction();
+        final ArrayTabulatedFunction brokenFunction = getLeftBoundNaNFunction();
+        final LinkedListTabulatedFunction listFunction = getLinkedListTabulatedFunction();
+        final LinkedListTabulatedFunction anotherListFunction = getListFunction();
+        final TabulatedFunction arrayDivide = arrayOperation.divide(arrayFunction, anotherArrayFunction);
+        final TabulatedFunction arrayAndListDivide = listOperation.divide(arrayFunction, listFunction);
+        final TabulatedFunction listDivide = listOperation.divide(anotherListFunction, anotherListFunction);
+        assertThrows(InconsistentFunctionsException.class, () -> arrayOperation.divide(arrayFunction, brokenFunction));
+        assertThrows(InconsistentFunctionsException.class, () -> listOperation.divide(arrayFunction, anotherListFunction));
+        int i = 0;
+        for (Point point : arrayDivide) {
+            assertEquals(arrayFunction.getX(i), point.x);
+            assertEquals(arrayFunction.getY(i) / anotherArrayFunction.getY(i), point.y);
+            i++;
+        }
+        i = 0;
+        for (Point point : listDivide) {
+            assertEquals(anotherListFunction.getX(i), point.x);
+            assertEquals(1.0, point.y);
+            i++;
+        }
+        i = 0;
+        for (Point point : arrayAndListDivide) {
+            assertEquals(arrayFunction.getX(i), point.x);
+            assertEquals(arrayFunction.getY(i) / listFunction.getY(i), point.y);
+            i++;
+        }
+    }
 }
