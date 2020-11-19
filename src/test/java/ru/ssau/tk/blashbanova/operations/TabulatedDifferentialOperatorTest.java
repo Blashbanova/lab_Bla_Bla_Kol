@@ -25,12 +25,14 @@ public class TabulatedDifferentialOperatorTest {
         TabulatedFunction testList = new LinkedListTabulatedFunction(new double[]{1, 2, 3, 4}, new double[]{1, 4, 9, 16});
         TabulatedDifferentialOperator differentialListOperator = getListDifferentialOperator();
         testList = differentialListOperator.derive(testList);
+        assertTrue(testList instanceof LinkedListTabulatedFunction);
         assertEquals(testList.getY(0), 3, ACCURACY);
         assertEquals(testList.getY(1), 5, ACCURACY);
         assertEquals(testList.getY(3), 7, ACCURACY);
         TabulatedFunction testArray = new ArrayTabulatedFunction(new double[]{1, 2, 3, 4}, new double[]{1, 2, 3, 4});
         TabulatedDifferentialOperator differentialArrayOperator = new TabulatedDifferentialOperator(new ArrayTabulatedFunctionFactory());
         testArray = differentialArrayOperator.derive(testArray);
+        assertTrue(testArray instanceof ArrayTabulatedFunction);
         assertEquals(testArray.getX(3), 4, ACCURACY);
         assertEquals(testArray.getY(2), 1, ACCURACY);
         assertEquals(testArray.getY(3), 1, ACCURACY);
