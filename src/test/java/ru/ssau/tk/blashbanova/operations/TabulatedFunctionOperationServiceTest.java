@@ -110,6 +110,9 @@ public class TabulatedFunctionOperationServiceTest {
         final TabulatedFunction listSum = arrayOperation.sum(anotherListFunction, anotherListFunction);
         assertThrows(InconsistentFunctionsException.class, () -> arrayOperation.sum(arrayFunction, brokenFunction));
         assertThrows(InconsistentFunctionsException.class, () -> listOperation.sum(arrayFunction, anotherListFunction));
+        assertTrue(arraySum instanceof ArrayTabulatedFunction);
+        assertTrue(arrayAndListSum instanceof LinkedListTabulatedFunction);
+        assertTrue(listSum instanceof ArrayTabulatedFunction);
         int i = 0;
         for (Point point : arraySum) {
             assertEquals(arrayFunction.getX(i), point.x);
@@ -145,6 +148,9 @@ public class TabulatedFunctionOperationServiceTest {
         final TabulatedFunction listSubtract = listOperation.subtract(anotherListFunction, anotherListFunction);
         assertThrows(InconsistentFunctionsException.class, () -> arrayOperation.subtract(arrayFunction, brokenFunction));
         assertThrows(InconsistentFunctionsException.class, () -> listOperation.subtract(arrayFunction, anotherListFunction));
+        assertTrue(arraySubtract instanceof ArrayTabulatedFunction);
+        assertTrue(arrayAndListSubtract instanceof LinkedListTabulatedFunction);
+        assertTrue(listSubtract instanceof LinkedListTabulatedFunction);
         int i = 0;
         for (Point point : arraySubtract) {
             assertEquals(arrayFunction.getX(i), point.x);
@@ -179,6 +185,9 @@ public class TabulatedFunctionOperationServiceTest {
         final TabulatedFunction listMultiply = listOperation.multiply(anotherListFunction, anotherListFunction);
         assertThrows(InconsistentFunctionsException.class, () -> arrayOperation.multiply(arrayFunction, brokenFunction));
         assertThrows(InconsistentFunctionsException.class, () -> listOperation.multiply(arrayFunction, anotherListFunction));
+        assertTrue(arrayMultiply instanceof ArrayTabulatedFunction);
+        assertTrue(arrayAndListMultiply instanceof LinkedListTabulatedFunction);
+        assertTrue(listMultiply instanceof LinkedListTabulatedFunction);
         int i = 0;
         for (Point point : arrayMultiply) {
             assertEquals(arrayFunction.getX(i), point.x);
@@ -213,6 +222,9 @@ public class TabulatedFunctionOperationServiceTest {
         final TabulatedFunction listDivide = listOperation.divide(anotherListFunction, anotherListFunction);
         assertThrows(InconsistentFunctionsException.class, () -> arrayOperation.divide(arrayFunction, brokenFunction));
         assertThrows(InconsistentFunctionsException.class, () -> listOperation.divide(arrayFunction, anotherListFunction));
+        assertTrue(arrayDivide instanceof ArrayTabulatedFunction);
+        assertTrue(arrayAndListDivide instanceof LinkedListTabulatedFunction);
+        assertTrue(listDivide instanceof LinkedListTabulatedFunction);
         int i = 0;
         for (Point point : arrayDivide) {
             assertEquals(arrayFunction.getX(i), point.x);
