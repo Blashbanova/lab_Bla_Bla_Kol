@@ -32,4 +32,12 @@ public class AbstractTabulatedFunctionTest {
         assertThrows(ArrayIsNotSortedException.class, () -> AbstractTabulatedFunction.checkSorted(unsortedArray));
         AbstractTabulatedFunction.checkSorted(sortedArray);
     }
+
+    @Test
+    public void testToString() {
+        double[] x = {0.1, 1.2, 2.3};
+        double[] y = {1.1, 2.2, 3.3};
+        assertEquals(new ArrayTabulatedFunction(x, y).toString(), "ArrayTabulatedFunction size = 3\n[0.1; 1.1]\n[1.2; 2.2]\n[2.3; 3.3]");
+        assertEquals(new LinkedListTabulatedFunction(x, y).toString(), "LinkedListTabulatedFunction size = 3\n[0.1; 1.1]\n[1.2; 2.2]\n[2.3; 3.3]");
+    }
 }
