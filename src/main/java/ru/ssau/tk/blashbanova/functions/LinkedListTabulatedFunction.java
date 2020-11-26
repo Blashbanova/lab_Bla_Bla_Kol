@@ -2,10 +2,12 @@ package ru.ssau.tk.blashbanova.functions;
 
 import ru.ssau.tk.blashbanova.exceptions.InterpolationException;
 
+import java.io.Serializable;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public class LinkedListTabulatedFunction extends AbstractTabulatedFunction {
+public class LinkedListTabulatedFunction extends AbstractTabulatedFunction implements Serializable {
+    private static final long serialVersionUID = -2533098847375363225L;
     private Node head;
     private int count = 0;
 
