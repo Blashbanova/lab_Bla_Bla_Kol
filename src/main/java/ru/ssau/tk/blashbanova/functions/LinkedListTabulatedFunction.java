@@ -170,7 +170,8 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
         return interpolate(x, indexNode.x, indexNode.next.x, indexNode.y, indexNode.next.y);
     }
 
-    protected static class Node {
+    protected static class Node implements Serializable{
+        private static final long serialVersionUID = 243897275333018942L;
         public Node next;
         public Node prev;
         public double x;
