@@ -1,6 +1,10 @@
 package ru.ssau.tk.blashbanova.exceptions;
 
-public class ArrayIsNotSortedException extends RuntimeException {
+import java.io.Serializable;
+
+public class ArrayIsNotSortedException extends RuntimeException implements Serializable {
+    private static final long serialVersionUID = 489806068918900516L;
+
     public ArrayIsNotSortedException() {
     }
 

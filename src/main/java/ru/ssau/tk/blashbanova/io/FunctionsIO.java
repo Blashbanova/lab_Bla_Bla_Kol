@@ -23,6 +23,16 @@ public final class FunctionsIO {
         write.flush();
     }
 
+    public static void writeTabulatedFunction(BufferedOutputStream outputStream, TabulatedFunction function) throws IOException {
+        DataOutputStream out = new DataOutputStream(outputStream);
+        out.writeInt(function.getCount());
+        for (Point point : function) {
+            out.writeDouble(point.x);
+            out.writeDouble(point.y);
+        }
+        out.flush();
+    }
+
     public static TabulatedFunction readTabulatedFunction(BufferedReader reader, TabulatedFunctionFactory factory) throws IOException {
         try {
             int size = Integer.parseInt(reader.readLine());
@@ -35,29 +45,9 @@ public final class FunctionsIO {
                 yValues[i] = formatter.parse(values[1]).doubleValue();
             }
             return factory.create(xValues, yValues);
-        } catch (IOException e) {
-            e.printStackTrace();
         } catch (ParseException e) {
-            e.printStackTrace();
             throw new IOException("Unexpected exception", e);
         }
-        return null;
-    }
-
-    public static void serialize(BufferedOutputStream stream, TabulatedFunction function) throws IOException {
-        ObjectOutputStream out = new ObjectOutputStream(stream);
-        out.writeObject(function);
-        out.flush();
-    }
-
-    public static void writeTabulatedFunction(BufferedOutputStream outputStream, TabulatedFunction function) throws IOException {
-        DataOutputStream out = new DataOutputStream(outputStream);
-        out.writeInt(function.getCount());
-        for (Point point : function) {
-            out.writeDouble(point.x);
-            out.writeDouble(point.y);
-        }
-        out.flush();
     }
 
     public static TabulatedFunction readTabulatedFunction(BufferedInputStream inputStream, TabulatedFunctionFactory factory) throws IOException {
@@ -70,6 +60,12 @@ public final class FunctionsIO {
             yValues[i] = in.readDouble();
         }
         return factory.create(xValues, yValues);
+    }
+
+    public static void serialize(BufferedOutputStream stream, TabulatedFunction function) throws IOException {
+        ObjectOutputStream out = new ObjectOutputStream(stream);
+        out.writeObject(function);
+        out.flush();
     }
 
     public static TabulatedFunction deserialize(BufferedInputStream stream) throws IOException, ClassNotFoundException {
