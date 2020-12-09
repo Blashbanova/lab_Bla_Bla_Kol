@@ -3,7 +3,11 @@ package ru.ssau.tk.blashbanova.concurrent;
 import org.testng.annotations.Test;
 import ru.ssau.tk.blashbanova.functions.ArrayTabulatedFunction;
 import ru.ssau.tk.blashbanova.functions.LinkedListTabulatedFunction;
+import ru.ssau.tk.blashbanova.functions.Point;
 import ru.ssau.tk.blashbanova.functions.ZeroFunction;
+
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 import static org.testng.Assert.*;
 
@@ -100,7 +104,27 @@ public class SynchronizedTabulatedFunctionTest {
     }
 
     @Test
-    public void testIterator() {
+    public void testIteratorWhile() {
+        Iterator<Point> it1 = getSynchronizedArray().iterator();
+        int i = 0;
+        while (it1.hasNext()) {
+            Point a = it1.next();
+            assertEquals(getSynchronizedArray().getX(i), a.x);
+            assertEquals(getSynchronizedArray().getY(i++), a.y);
+        }
+        assertEquals(getSynchronizedArray().getCount(), i);
+        assertThrows(NoSuchElementException.class, it1::next);
+
+    }
+
+    @Test
+    public void testIteratorForEach() {
+        int i = 0;
+        for (Point a : getSynchronizedList()) {
+            assertEquals(a.x, getSynchronizedList().getX(i));
+            assertEquals(a.y, getSynchronizedList().getY(i++));
+        }
+        assertEquals(getSynchronizedList().getCount(), i);
     }
 
     @Test
