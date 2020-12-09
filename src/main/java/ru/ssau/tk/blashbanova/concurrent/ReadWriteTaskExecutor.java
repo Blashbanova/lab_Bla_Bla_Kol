@@ -18,6 +18,6 @@ public class ReadWriteTaskExecutor {
             thread.start();
         }
         Thread.sleep(2_000);
-        System.out.println(function.toString());
+        System.out.println(function);
     }
 }
