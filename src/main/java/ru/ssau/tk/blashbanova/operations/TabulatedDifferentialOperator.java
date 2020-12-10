@@ -1,5 +1,6 @@
 package ru.ssau.tk.blashbanova.operations;
 
+import ru.ssau.tk.blashbanova.concurrent.SynchronizedTabulatedFunction;
 import ru.ssau.tk.blashbanova.functions.Point;
 import ru.ssau.tk.blashbanova.functions.TabulatedFunction;
 import ru.ssau.tk.blashbanova.functions.factory.ArrayTabulatedFunctionFactory;
@@ -40,5 +41,14 @@ public class TabulatedDifferentialOperator implements DifferentialOperator<Tabul
         yValues[length - 1] = yValues[length - 2];
 
         return factory.create(xValues, yValues);
+    }
+
+    public TabulatedFunction deriveSynchronously(TabulatedFunction function) {
+        if (function instanceof SynchronizedTabulatedFunction) {
+            return ((SynchronizedTabulatedFunction) function).doSynchronously(this::derive);
+        }
+        Object mutex = new Object();
+        SynchronizedTabulatedFunction synchronizedFunction = new SynchronizedTabulatedFunction(function, mutex);
+        return synchronizedFunction.doSynchronously(this::derive);
     }
 }

@@ -136,4 +136,15 @@ public class SynchronizedTabulatedFunctionTest {
         assertEquals(getSynchronizedArray().apply(8), 10, ACCURACY);
         assertEquals(getSynchronizedArray().apply(10), 12, ACCURACY);
     }
+
+    @Test
+    public void testDoSynchronously() {
+        SynchronizedTabulatedFunction function = getSynchronizedArray();
+        assertEquals(function.doSynchronously(function1 -> {
+            int i = function1.getCount();
+            return function1.getX(i - 2);
+        }), 1.4);
+        assertNull(function.doSynchronously((SynchronizedTabulatedFunction.Operation<Void>) function12 -> null));
+        assertEquals((int) function.doSynchronously(SynchronizedTabulatedFunction::getCount), 5);
+    }
 }
