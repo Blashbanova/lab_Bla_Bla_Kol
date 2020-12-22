@@ -6,7 +6,6 @@ import java.util.List;
 public class TableXY extends AbstractTableModel {
     public static final int X_COLUMN_NUMBER = 0;
     public static final int Y_COLUMN_NUMBER = 1;
-    private static final long serialVersionUID = 2699987044712379278L;
 
     private final List<String> xValues;
     private final List<String> yValues;
