@@ -1,7 +1,10 @@
 package ru.ssau.tk.blashbanova.ui;
 
+import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class TableXY extends AbstractTableModel {
     public static final int X_COLUMN_NUMBER = 0;

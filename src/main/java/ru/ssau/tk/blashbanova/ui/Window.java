@@ -7,8 +7,7 @@ import ru.ssau.tk.blashbanova.functions.factory.ArrayTabulatedFunctionFactory;
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,11 +17,11 @@ public class Window extends JFrame {
     AbstractTableModel tableModel = new TableXY(xValues, yValues);
     JTable table = new JTable(tableModel);
     JLabel label = new JLabel("Число точек:");
-    JTextField textField = new JTextField("");
+    JTextField textField = new JTextField("2");
     JButton addingButton = new JButton("Добавить");
-    JButton cancelButton = new JButton("Отмена");
     JButton refreshButton = new JButton("Очистить");
     JButton createButton = new JButton("Создать");
+
 
     public Window() {
         super("Window");
@@ -30,13 +29,11 @@ public class Window extends JFrame {
         setLayout(new FlowLayout());
         setSize(400, 400);
         addingButton.setFocusPainted(false);
-        cancelButton.setFocusPainted(false);
         refreshButton.setFocusPainted(false);
         createButton.setFocusPainted(false);
         getContentPane().add(label);
         getContentPane().add(textField);
         getContentPane().add(addingButton);
-        getContentPane().add(cancelButton);
         getContentPane().add(refreshButton);
         getContentPane().add(createButton);
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -56,8 +53,7 @@ public class Window extends JFrame {
                 .addGroup(layout.createSequentialGroup()
                         .addComponent(label)
                         .addComponent(textField)
-                        .addComponent(addingButton)
-                        .addComponent(cancelButton))
+                        .addComponent(addingButton))
                 .addComponent(tableScrollPane)
                 .addGroup(layout.createSequentialGroup()
                         .addComponent(createButton)
@@ -68,8 +64,7 @@ public class Window extends JFrame {
                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                         .addComponent(label)
                         .addComponent(textField)
-                        .addComponent(addingButton)
-                        .addComponent(cancelButton))
+                        .addComponent(addingButton))
                 .addComponent(tableScrollPane)
                 .addGroup(layout.createParallelGroup()
                         .addComponent(createButton)
@@ -91,12 +86,15 @@ public class Window extends JFrame {
                         xValues.add(" ");
                         yValues.add(" ");
                     }
+                    refreshButton.setEnabled(true);
                     tableModel.fireTableDataChanged();
                 } catch (NumberFormatException exp) {
                     ExceptionHandler.showMessage("Введите целое число.");
                 }
             }
         }
+
+        refreshButton.setEnabled(false);
         textField.addActionListener(new AddingAction());
         addingButton.addActionListener(new AddingAction());
         createButton.addActionListener(e -> {
@@ -120,12 +118,70 @@ public class Window extends JFrame {
                 ExceptionHandler.showMessage("Невозможно создать функцию менее чем из двух точек.");
             }
         });
-        cancelButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
+        refreshButton.addActionListener(e -> {
+            int flag = JOptionPane.showConfirmDialog(null, "Вы уверены? Это действие нельзя отменить.", "Предупреждение", JOptionPane.YES_NO_OPTION);
+            if (flag == 0) {
+                int size = xValues.size();
+                xValues.clear();
+                yValues.clear();
+                for (int i = 0; i < size; i++) {
+                    xValues.add(" ");
+                    yValues.add(" ");
+                }
+                tableModel.fireTableDataChanged();
             }
         });
+        table.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getButton() == MouseEvent.BUTTON3) {
+                    int selectedRow = table.getSelectedRow();
+                    if (selectedRow != -1) {
+                        getPopupMenu().show(e.getComponent(), e.getX(), e.getY());
+                    }
+                }
+            }
+
+            private JPopupMenu getPopupMenu() {
+                JPopupMenu popupMenu = new JPopupMenu();
+                JMenuItem deleteItem = new JMenuItem("Удалить");
+                JMenuItem cleanItem = new JMenuItem("Очистить");
+                deleteItem.addActionListener(e -> {
+                    xValues.remove(table.getSelectedRow());
+                    yValues.remove(table.getSelectedRow());
+                    if (xValues.isEmpty()) {
+                        refreshButton.setEnabled(false);
+                    }
+                    tableModel.fireTableDataChanged();
+                });
+                cleanItem.addActionListener(e -> {
+                    xValues.set(table.getSelectedRow(), " ");
+                    yValues.set(table.getSelectedRow(), " ");
+                    tableModel.fireTableDataChanged();
+                });
+                popupMenu.add(deleteItem);
+                popupMenu.add(cleanItem);
+                return popupMenu;
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+            }
+
+        });
+
     }
 
     public static void main(String[] args) {
