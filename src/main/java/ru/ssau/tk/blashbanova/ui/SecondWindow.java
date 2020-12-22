@@ -1,15 +1,17 @@
 package ru.ssau.tk.blashbanova.ui;
 
+import ru.ssau.tk.blashbanova.functions.*;
+import ru.ssau.tk.blashbanova.functions.factory.ArrayTabulatedFunctionFactory;
+import ru.ssau.tk.blashbanova.functions.factory.TabulatedFunctionFactory;
+
 import javax.swing.*;
-import javax.swing.table.AbstractTableModel;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.awt.event.ActionEvent;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 public class SecondWindow extends JFrame {
-    List<String> xValues = new ArrayList<>();
-    List<String> yValues = new ArrayList<>();
-
 
     JLabel label = new JLabel("Введите количество точек разбиения:");
     JTextField textField = new JTextField("");
@@ -17,7 +19,7 @@ public class SecondWindow extends JFrame {
     JTextField secondTextField = new JTextField("");
     JLabel thirdLabel = new JLabel("по");
     JTextField thirdTextField = new JTextField("");
-    JComboBox<String> comboBox = new JComboBox<>(new String[] {
+    JComboBox<String> comboBox = new JComboBox<>(new String[]{
             "Гиперболический тангенс", "Единичная функция", "Квадратичная функция", "Константная функция", "Модуль функция", "Нулевая функция", "Тождественная функция"
     });
     JButton firstButton = new JButton("Создать");
@@ -37,9 +39,56 @@ public class SecondWindow extends JFrame {
         getContentPane().add(comboBox);
         getContentPane().add(firstButton);
 
+        addButtonListeners();
         compose();
         setLocationRelativeTo(null);
         setVisible(true);
+    }
+
+    private void createFunction() {
+        Map<String, MathFunction> mapFunction = new HashMap<>();
+        mapFunction.put("Гиперболический тангенс", new HyperTangentFunction());
+        mapFunction.put("Единичная функция", new UnitFunction());
+        mapFunction.put("Квадратичная функция", new SqrFunction());
+        mapFunction.put("Константная функция", new ConstantFunction(3));
+        mapFunction.put("Модуль функция", new ModulusFunction());
+        mapFunction.put("Нулевая функция", new ZeroFunction());
+        mapFunction.put("Тождественная функция", new IdentityFunction());
+
+        String func = (String) comboBox.getSelectedItem();
+        MathFunction selectedFunction = mapFunction.get(func);
+        double from = Double.parseDouble(secondTextField.getText());
+        double to = Double.parseDouble(thirdTextField.getText());
+        int count = Integer.parseInt(textField.getText());
+
+        if (to < from) {
+            ExceptionHandler.showMessage("Введите правильный интервал.");
+        }
+
+        TabulatedFunctionFactory factory = new ArrayTabulatedFunctionFactory();
+        TabulatedFunction function = factory.createOther(selectedFunction, from, to, count);
+        System.out.println(function);
+    }
+
+    private void addButtonListeners() {
+        firstButton.addActionListener(new AbstractAction() {
+            private static final long serialVersionUID = 5740706030064534064L;
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    int size = Integer.parseInt(textField.getText());
+                    if (size < 0) {
+                        ExceptionHandler.showMessage("Введите положительное число.");
+                    }
+                    createFunction();
+                    dispose();
+                } catch (NumberFormatException exp) {
+                    ExceptionHandler.showMessage("Введите целое число.");
+                }
+            }
+        });
+
     }
 
     private void compose() {
