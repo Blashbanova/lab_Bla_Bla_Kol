@@ -13,18 +13,20 @@ public class Window extends JFrame {
     AbstractTableModel tableModel = new TableXY(xValues, yValues);
     JTable table = new JTable(tableModel);
     JLabel label = new JLabel("Введите количество точек:");
-    JTextField textField = new JTextField("2"); //пока что 2
-    JButton button = new JButton("Создать");
+    JTextField textField = new JTextField("");
+    JButton firstButton = new JButton("Добавить");
+    JButton secondButton = new JButton("Создать");
 
     public Window() {
         super("Window");
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setLayout(new FlowLayout());
-        setSize(400, 200);
+        setSize(800, 400);
 
         getContentPane().add(label);
         getContentPane().add(textField);
-        getContentPane().add(button);
+        getContentPane().add(firstButton);
+        getContentPane().add(secondButton);
 
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         addButtonListeners();
@@ -44,7 +46,8 @@ public class Window extends JFrame {
                 .addGroup(layout.createSequentialGroup()
                         .addComponent(label)
                         .addComponent(textField)
-                        .addComponent(button))
+                        .addComponent(firstButton)
+                        .addComponent(secondButton))
                 .addComponent(tableScrollPane)
         );
 
@@ -52,27 +55,37 @@ public class Window extends JFrame {
                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                         .addComponent(label)
                         .addComponent(textField)
-                        .addComponent(button))
+                        .addComponent(firstButton)
+                        .addComponent(secondButton))
                 .addComponent(tableScrollPane)
         );
     }
 
     private void addButtonListeners() {
-        button.addActionListener(new AbstractAction() {
+        firstButton.addActionListener(new AbstractAction() {
             private static final long serialVersionUID = -8821686667162924798L;
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                for (int i = 0; i < 2; i++) {
+                for (int i = 0; i < Integer.parseInt(textField.getText()); i++) {
                     xValues.add(" ");
                     yValues.add(" ");
                 }
                 tableModel.fireTableDataChanged();
             }
         });
+
+        secondButton.addActionListener(new AbstractAction() {
+            private static final long serialVersionUID = 3602367915716170408L;
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //что-то нужно сделать
+            }
+        });
     }
 
     public static void main(String[] args) {
-        Window firstWindow = new Window();
+        new Window();
     }
 }
