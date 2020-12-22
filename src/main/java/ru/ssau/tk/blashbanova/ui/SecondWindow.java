@@ -6,13 +6,10 @@ import ru.ssau.tk.blashbanova.functions.factory.TabulatedFunctionFactory;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 public class SecondWindow extends JFrame {
-
     JLabel label = new JLabel("Введите количество точек разбиения:");
     JTextField textField = new JTextField("");
     JLabel secondLabel = new JLabel("Интервал с");
@@ -61,34 +58,26 @@ public class SecondWindow extends JFrame {
         double to = Double.parseDouble(thirdTextField.getText());
         int count = Integer.parseInt(textField.getText());
 
-        if (to < from) {
-            ExceptionHandler.showMessage("Введите правильный интервал.");
-        }
-
         TabulatedFunctionFactory factory = new ArrayTabulatedFunctionFactory();
         TabulatedFunction function = factory.createOther(selectedFunction, from, to, count);
         System.out.println(function);
     }
 
     private void addButtonListeners() {
-        firstButton.addActionListener(new AbstractAction() {
-            private static final long serialVersionUID = 5740706030064534064L;
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    int size = Integer.parseInt(textField.getText());
-                    if (size < 0) {
-                        ExceptionHandler.showMessage("Введите положительное число.");
-                    }
-                    createFunction();
-                    dispose();
-                } catch (NumberFormatException exp) {
-                    ExceptionHandler.showMessage("Введите целое число.");
+        firstButton.addActionListener(e -> {
+            try {
+                int size = Integer.parseInt(textField.getText());
+                if (size <= 0) {
+                    ExceptionHandler.showMessage("Введите положительное число.");
                 }
+                createFunction();
+                dispose();
+            } catch (NumberFormatException exp) {
+                ExceptionHandler.showMessage("Введите целое число.");
+            } catch (IllegalArgumentException exp) {
+                ExceptionHandler.showMessage("Введите правильный интервал.");
             }
         });
-
     }
 
     private void compose() {
