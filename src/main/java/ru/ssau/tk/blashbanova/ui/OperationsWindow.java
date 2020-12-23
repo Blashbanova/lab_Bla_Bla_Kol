@@ -1,13 +1,14 @@
 package ru.ssau.tk.blashbanova.ui;
 
-import ru.ssau.tk.blashbanova.functions.ArrayTabulatedFunction;
 import ru.ssau.tk.blashbanova.functions.TabulatedFunction;
+
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
 import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class OperationsWindow extends JFrame {
@@ -24,14 +25,14 @@ public class OperationsWindow extends JFrame {
     AbstractTableModel resultTableModel = new TablePartlyEditable(resultXValues, resultYValues);
     JTable resultTable = new JTable(resultTableModel);
     JLabel label = new JLabel("=");
-    JComboBox<String> comboBox = new JComboBox<>(new String[]{"+", "-", "*", "/",});
+    JComboBox<String> comboBox = new JComboBox<>(new String[]{" +", " -", " *", " /",});
     JButton saveButton = new JButton("Сохранить");
     JButton uploadButton = new JButton("Загрузить");
-    JButton createButton = new JButton("Создать");
+    JButton createButton = new JButton("Создать из...");
     JButton secondSaveButton = new JButton("Сохранить");
+    JButton resultSaveButton = new JButton("Сохранить");
     JButton secondUploadButton = new JButton("Загрузить");
-    JButton secondCreateButton = new JButton("Создать");
-
+    JButton secondCreateButton = new JButton("Создать из...");
 
     public OperationsWindow() {
         super("Operation Service");
@@ -41,6 +42,10 @@ public class OperationsWindow extends JFrame {
         saveButton.setFocusPainted(false);
         uploadButton.setFocusPainted(false);
         createButton.setFocusPainted(false);
+        secondSaveButton.setFocusPainted(false);
+        secondCreateButton.setFocusPainted(false);
+        secondUploadButton.setFocusPainted(false);
+        resultSaveButton.setFocusPainted(false);
         comboBox.setPreferredSize(new Dimension(2, 2));
         label.setFont(new Font("Consolas", Font.BOLD, 24));
         getContentPane().add(label);
@@ -55,6 +60,7 @@ public class OperationsWindow extends JFrame {
         setVisible(true);
     }
 
+
     private void compose() {
         GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -65,6 +71,7 @@ public class OperationsWindow extends JFrame {
         JScrollPane resultTableScrollPane = new JScrollPane(resultTable);
         layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
+                        .addGap(8)
                         .addComponent(tableScrollPane)
                         .addComponent(comboBox)
                         .addComponent(secondTableScrollPane)
@@ -74,10 +81,12 @@ public class OperationsWindow extends JFrame {
                         .addComponent(createButton)
                         .addComponent(uploadButton)
                         .addComponent(saveButton)
-                        .addGap(60)
+                        .addGap(33)
                         .addComponent(secondCreateButton)
                         .addComponent(secondUploadButton)
-                        .addComponent(secondSaveButton)));
+                        .addComponent(secondSaveButton)
+                        .addGap(125)
+                        .addComponent(resultSaveButton)));
         layout.setVerticalGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                         .addComponent(tableScrollPane)
@@ -99,20 +108,67 @@ public class OperationsWindow extends JFrame {
                         .addGap(60)
                         .addComponent(secondCreateButton)
                         .addComponent(secondUploadButton)
-                        .addComponent(secondSaveButton)));
+                        .addComponent(secondSaveButton)
+                        .addGap(60)
+                        .addComponent(resultSaveButton)));
+    }
+
+    private void setValues(List<String> xValues, List<String> yValues, TabulatedFunction function) {
+        xValues.clear();
+        yValues.clear();
+        for (int i = 0; i < function.getCount(); i++) {
+            xValues.add(Double.toString(function.getX(i)));
+            yValues.add(Double.toString(function.getY(i)));
+        }
     }
 
     private void addButtonListeners() {
-        createButton.addActionListener(e -> {
-            Window secondWindow = new Window();
-            TabulatedFunction function = secondWindow.getFunction();
-            for (int i = 0; i < function.getCount(); i++) {
-                xValues.add(Double.toString(function.getX(i)));
-                yValues.add(Double.toString(function.getY(i)));
+        createButton.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getButton() == MouseEvent.BUTTON1) {
+                    JPopupMenu popupMenu = new JPopupMenu();
+                    JMenuItem table = new JMenuItem("таблицы");
+                    JMenuItem func = new JMenuItem("встроенной функции");
+                    table.addActionListener(ee -> {
+                        Window secondWindow = new Window();
+                        setValues(xValues, yValues, secondWindow.function);
+                        firstTableModel.fireTableDataChanged();
+                    });
+                    func.addActionListener(ee -> {
+                        SecondWindow secondWindow = new SecondWindow();
+                        setValues(xValues, yValues, secondWindow.function);
+                        firstTableModel.fireTableDataChanged();
+                    });
+                    popupMenu.add(table);
+                    popupMenu.addSeparator();
+                    popupMenu.add(func);
+                    popupMenu.show(createButton, createButton.getWidth() + 1, createButton.getHeight() / 30);
+                }
             }
-            firstTableModel.fireTableDataChanged();
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+
+            }
         });
     }
+
 
     public static void main(String[] args) {
         new OperationsWindow();

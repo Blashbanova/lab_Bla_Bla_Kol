@@ -20,6 +20,7 @@ public class SecondWindow extends JDialog {
             "Гиперболический тангенс", "Единичная функция", "Квадратичная функция", "Константная функция", "Модуль функция", "Нулевая функция", "Тождественная функция"
     });
     JButton firstButton = new JButton("Создать");
+    TabulatedFunction function;
 
     public SecondWindow() {
         setModal(true);
@@ -60,8 +61,7 @@ public class SecondWindow extends JDialog {
         int count = Integer.parseInt(textField.getText());
 
         TabulatedFunctionFactory factory = new ArrayTabulatedFunctionFactory();
-        TabulatedFunction function = factory.createOther(selectedFunction, from, to, count);
-        System.out.println(function);
+        function = factory.createOther(selectedFunction, from, to, count);
     }
 
     private void addButtonListeners() {
