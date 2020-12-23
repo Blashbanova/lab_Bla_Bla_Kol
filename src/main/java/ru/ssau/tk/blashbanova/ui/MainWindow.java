@@ -16,8 +16,8 @@ public class MainWindow extends JFrame {
         super("MainWindow");
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setLayout(new FlowLayout());
-        int width = 1280;
-        int height = 720;
+        int width = 600;
+        int height = 600;
         setSize(width, height);
 
         getContentPane().add(arrayButton);
@@ -60,7 +60,7 @@ public class MainWindow extends JFrame {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                new Window();
+                new Window(SettingsWindow.getFactory());
             }
         });
         tabulatedButton.addActionListener(new AbstractAction() {
@@ -68,7 +68,7 @@ public class MainWindow extends JFrame {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                new SecondWindow();
+                new SecondWindow(SettingsWindow.getFactory());
             }
         });
         operationButton.addActionListener(new AbstractAction() {
@@ -76,7 +76,7 @@ public class MainWindow extends JFrame {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                new OperationsWindow();
+                new OperationsWindow(SettingsWindow.getFactory());
             }
         });
         settingsButton.addActionListener(new AbstractAction() {

@@ -3,6 +3,7 @@ package ru.ssau.tk.blashbanova.ui;
 import ru.ssau.tk.blashbanova.exceptions.ArrayIsNotSortedException;
 import ru.ssau.tk.blashbanova.functions.TabulatedFunction;
 import ru.ssau.tk.blashbanova.functions.factory.ArrayTabulatedFunctionFactory;
+import ru.ssau.tk.blashbanova.functions.factory.TabulatedFunctionFactory;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
@@ -21,9 +22,11 @@ public class Window extends JDialog {
     JButton addingButton = new JButton("Добавить");
     JButton refreshButton = new JButton("Очистить");
     JButton createButton = new JButton("Создать");
-    TabulatedFunction function;
+    private TabulatedFunction function;
+    private final TabulatedFunctionFactory factory;
 
-    public Window() {
+    public Window(TabulatedFunctionFactory factory) {
+        this.factory = factory;
         setModal(true);
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         setLayout(new FlowLayout());
@@ -41,6 +44,10 @@ public class Window extends JDialog {
         compose();
         setLocationRelativeTo(null);
         setVisible(true);
+    }
+
+    public TabulatedFunction getFunction() {
+        return function;
     }
 
     private void compose() {
@@ -106,8 +113,8 @@ public class Window extends JDialog {
                     x[i] = Double.parseDouble(xValues.get(i));
                     y[i] = Double.parseDouble(yValues.get(i));
                 }
-                ArrayTabulatedFunctionFactory factory = new ArrayTabulatedFunctionFactory();
                 function = factory.create(x, y);
+                System.out.println(function);
                 dispose();
             } catch (NumberFormatException exp) {
                 ExceptionHandler.showMessage("Некорректные данные: введите числа в виде десятичной дроби через точку.");
@@ -180,6 +187,6 @@ public class Window extends JDialog {
     }
 
     public static void main(String[] args) {
-        new Window();
+        new Window(new ArrayTabulatedFunctionFactory());
     }
 }

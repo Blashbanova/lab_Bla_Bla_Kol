@@ -1,6 +1,8 @@
 package ru.ssau.tk.blashbanova.ui;
 
 import ru.ssau.tk.blashbanova.functions.TabulatedFunction;
+import ru.ssau.tk.blashbanova.functions.factory.ArrayTabulatedFunctionFactory;
+import ru.ssau.tk.blashbanova.functions.factory.TabulatedFunctionFactory;
 
 
 import javax.swing.*;
@@ -11,7 +13,7 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OperationsWindow extends JFrame {
+public class OperationsWindow extends JDialog {
     List<String> xValues = new ArrayList<>();
     List<String> yValues = new ArrayList<>();
     List<String> secondXValues = new ArrayList<>();
@@ -33,10 +35,12 @@ public class OperationsWindow extends JFrame {
     JButton secondUploadButton = new JButton("Загрузить");
     JButton secondCreateButton = new JButton("Создать из...");
     JButton resultButton = new JButton("=");
+    private final TabulatedFunctionFactory factory;
 
-    public OperationsWindow() {
-        super("Operation Service");
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+    public OperationsWindow(TabulatedFunctionFactory factory) {
+        this.factory = factory;
+        setModal(true);
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         setLayout(new FlowLayout());
         setSize(1000, 400);
         saveButton.setFocusPainted(false);
@@ -60,7 +64,6 @@ public class OperationsWindow extends JFrame {
         setLocationRelativeTo(null);
         setVisible(true);
     }
-
 
     private void compose() {
         GroupLayout layout = new GroupLayout(getContentPane());
@@ -128,13 +131,13 @@ public class OperationsWindow extends JFrame {
         JMenuItem table = new JMenuItem("таблицы");
         JMenuItem func = new JMenuItem("встроенной функции");
         table.addActionListener(ee -> {
-            Window secondWindow = new Window();
-            setValues(xValues, yValues, secondWindow.function);
+            Window secondWindow = new Window(factory);
+            setValues(xValues, yValues, secondWindow.getFunction());
             tableModel.fireTableDataChanged();
         });
         func.addActionListener(ee -> {
-            SecondWindow secondWindow = new SecondWindow();
-            setValues(xValues, yValues, secondWindow.function);
+            SecondWindow secondWindow = new SecondWindow(factory);
+            setValues(xValues, yValues, secondWindow.getFunction());
             tableModel.fireTableDataChanged();
         });
         popupMenu.add(table);
@@ -202,6 +205,6 @@ public class OperationsWindow extends JFrame {
     }
 
     public static void main(String[] args) {
-        new OperationsWindow();
+        new OperationsWindow(new ArrayTabulatedFunctionFactory());
     }
 }

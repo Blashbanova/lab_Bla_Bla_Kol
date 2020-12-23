@@ -1,13 +1,18 @@
 package ru.ssau.tk.blashbanova.ui;
 
+
+import ru.ssau.tk.blashbanova.functions.factory.ArrayTabulatedFunctionFactory;
+import ru.ssau.tk.blashbanova.functions.factory.LinkedListTabulatedFunctionFactory;
+import ru.ssau.tk.blashbanova.functions.factory.TabulatedFunctionFactory;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.util.ArrayList;
 
 public class SettingsWindow extends JDialog {
     JTabbedPane tabbedPane = new JTabbedPane();
+    private static TabulatedFunctionFactory factory = new ArrayTabulatedFunctionFactory();
 
     public SettingsWindow() {
         setModal(true);
@@ -30,19 +35,25 @@ public class SettingsWindow extends JDialog {
         setVisible(true);
     }
 
+    public static TabulatedFunctionFactory getFactory() {
+        return factory;
+    }
+
     private static class ColorOption extends JRadioButton {
         private final Color color;
+
         public ColorOption(String colorName, Color color) {
             super((colorName));
             this.color = color;
         }
+
         public Color getColor() {
             return color;
         }
     }
 
-    class FirstPanel extends JPanel{
-        ArrayList<ColorOption> colorOptions = new ArrayList<ColorOption>();
+    class FirstPanel extends JPanel {
+        ArrayList<ColorOption> colorOptions = new ArrayList<>();
 
         public FirstPanel() {
             colorOptions.add(new ColorOption("Черный", Color.BLACK));
@@ -55,12 +66,9 @@ public class SettingsWindow extends JDialog {
                 buttonGroup.add(colorOption);
                 setLayout(new FlowLayout());
                 add(colorOption);
-                colorOption.addItemListener(new ItemListener() {
-                    @Override
-                    public void itemStateChanged(ItemEvent e) {
-                        if (e.getStateChange() == ItemEvent.SELECTED) {
-                            getContentPane().setBackground(colorOption.getColor());
-                        }
+                colorOption.addItemListener(e -> {
+                    if (e.getStateChange() == ItemEvent.SELECTED) {
+                        getContentPane().setBackground(colorOption.getColor());
                     }
                 });
             }
@@ -77,8 +85,17 @@ public class SettingsWindow extends JDialog {
             group.add(secondButton);
             add(firstButton);
             add(secondButton);
+            firstButton.addItemListener(e -> {
+                if (e.getStateChange() == ItemEvent.SELECTED) {
+                    factory = new ArrayTabulatedFunctionFactory();
+                }
+            });
+            secondButton.addItemListener(e -> {
+                if (e.getStateChange() == ItemEvent.SELECTED) {
+                    factory = new LinkedListTabulatedFunctionFactory();
+                }
+            });
         }
-
     }
 
     public static void main(String[] args) {
