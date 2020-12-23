@@ -1,9 +1,10 @@
 package ru.ssau.tk.blashbanova.ui;
 
+import ru.ssau.tk.blashbanova.exceptions.InconsistentFunctionsException;
 import ru.ssau.tk.blashbanova.functions.TabulatedFunction;
 import ru.ssau.tk.blashbanova.functions.factory.ArrayTabulatedFunctionFactory;
 import ru.ssau.tk.blashbanova.functions.factory.TabulatedFunctionFactory;
-
+import ru.ssau.tk.blashbanova.operations.TabulatedFunctionOperationService;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
@@ -12,6 +13,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.List;
+
 
 public class OperationsWindow extends JDialog {
     List<String> xValues = new ArrayList<>();
@@ -24,7 +26,7 @@ public class OperationsWindow extends JDialog {
     JTable firstTable = new JTable(firstTableModel);
     AbstractTableModel secondTableModel = new TablePartlyEditable(secondXValues, secondYValues);
     JTable secondTable = new JTable(secondTableModel);
-    AbstractTableModel resultTableModel = new TablePartlyEditable(resultXValues, resultYValues);
+    AbstractTableModel resultTableModel = new TableNotEditable(resultXValues, resultYValues);
     JTable resultTable = new JTable(resultTableModel);
     JComboBox<String> comboBox = new JComboBox<>(new String[]{"+", "-", "*", "/",});
     JButton saveButton = new JButton("Сохранить");
@@ -36,6 +38,8 @@ public class OperationsWindow extends JDialog {
     JButton secondCreateButton = new JButton("Создать из...");
     JButton resultButton = new JButton("=");
     private final TabulatedFunctionFactory factory;
+    private TabulatedFunction firstFunction;
+    private TabulatedFunction secondFunction;
 
     public OperationsWindow(TabulatedFunctionFactory factory) {
         this.factory = factory;
@@ -50,6 +54,7 @@ public class OperationsWindow extends JDialog {
         secondCreateButton.setFocusPainted(false);
         secondUploadButton.setFocusPainted(false);
         resultSaveButton.setFocusPainted(false);
+        resultButton.setFocusPainted(false);
         comboBox.setPreferredSize(new Dimension(2, 2));
         comboBox.setFont(new Font("Consolas", Font.BOLD, 18));
         resultButton.setFont(new Font("Consolas", Font.BOLD, 24));
@@ -131,12 +136,22 @@ public class OperationsWindow extends JDialog {
         JMenuItem table = new JMenuItem("таблицы");
         JMenuItem func = new JMenuItem("встроенной функции");
         table.addActionListener(ee -> {
-            Window secondWindow = new Window(factory);
-            setValues(xValues, yValues, secondWindow.getFunction());
+            Window window = new Window(factory);
+            if (button == createButton) {
+                firstFunction = window.getFunction();
+            } else if (button == secondCreateButton) {
+                secondFunction = window.getFunction();
+            }
+            setValues(xValues, yValues, window.getFunction());
             tableModel.fireTableDataChanged();
         });
         func.addActionListener(ee -> {
             SecondWindow secondWindow = new SecondWindow(factory);
+            if (button == createButton) {
+                firstFunction = secondWindow.getFunction();
+            } else if (button == secondCreateButton) {
+                secondFunction = secondWindow.getFunction();
+            }
             setValues(xValues, yValues, secondWindow.getFunction());
             tableModel.fireTableDataChanged();
         });
@@ -144,6 +159,21 @@ public class OperationsWindow extends JDialog {
         popupMenu.addSeparator();
         popupMenu.add(func);
         popupMenu.show(button, button.getWidth() + 1, button.getHeight() / 30);
+    }
+
+    private TabulatedFunction getOperation(TabulatedFunction a, TabulatedFunction b) {
+        TabulatedFunctionOperationService operation = new TabulatedFunctionOperationService(factory);
+        switch ((String) comboBox.getSelectedItem()) {
+            case "+":
+                return operation.sum(a, b);
+            case "-":
+                return operation.subtract(a, b);
+            case "*":
+                return operation.multiply(a, b);
+            case "/":
+                return operation.divide(a, b);
+        }
+        return a;
     }
 
     private void addButtonListeners() {
@@ -200,6 +230,18 @@ public class OperationsWindow extends JDialog {
             @Override
             public void mouseExited(MouseEvent e) {
 
+            }
+        });
+
+        resultButton.addActionListener(e -> {
+            try {
+                TabulatedFunction resultFunction = getOperation(firstFunction, secondFunction);
+                setValues(resultXValues, resultYValues, resultFunction);
+                resultTableModel.fireTableDataChanged();
+            } catch (NullPointerException exp) {
+                ExceptionHandler.showMessage("Введите обе функции!");
+            } catch (InconsistentFunctionsException exp) {
+                ExceptionHandler.showCorgiMessage(exp.getMessage());
             }
         });
     }

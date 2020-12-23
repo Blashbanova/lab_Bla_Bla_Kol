@@ -81,7 +81,7 @@ public class SecondWindow extends JDialog {
             } catch (NumberFormatException exp) {
                 ExceptionHandler.showMessage("Введите целое число.");
             } catch (IllegalArgumentException exp) {
-                ExceptionHandler.showMessage("Введите правильный интервал.");
+                ExceptionHandler.showMessage(exp.getMessage());
             }
         });
     }

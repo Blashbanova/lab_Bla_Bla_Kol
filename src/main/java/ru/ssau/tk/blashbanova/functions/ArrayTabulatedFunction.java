@@ -15,7 +15,7 @@ public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements
 
     public ArrayTabulatedFunction(double[] xValues, double[] yValues) {
         if (xValues.length < 2) {
-            throw new IllegalArgumentException("Less than minimum length");
+            throw new IllegalArgumentException("Невозможно создать функцию менее чем из двух точек.");
         }
         AbstractTabulatedFunction.checkLengthIsTheSame(xValues, yValues);
         AbstractTabulatedFunction.checkSorted(xValues);
@@ -26,7 +26,7 @@ public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements
 
     public ArrayTabulatedFunction(MathFunction source, double xFrom, double xTo, int count) {
         if (xFrom > xTo) {
-            throw new IllegalArgumentException("Incorrect data");
+            throw new IllegalArgumentException("Введите правильный интервал.");
         }
         this.count = count;
         xValues = new double[count];

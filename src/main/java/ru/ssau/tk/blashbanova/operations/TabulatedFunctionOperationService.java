@@ -41,7 +41,7 @@ public class TabulatedFunctionOperationService {
 
     private TabulatedFunction doOperation(TabulatedFunction a, TabulatedFunction b, BiOperation operation) {
         if (a.getCount() != b.getCount()) {
-            throw new InconsistentFunctionsException();
+            throw new InconsistentFunctionsException("Число точек функций должно совпадать!");
         }
         int size = a.getCount();
         Point[] pointsOfA = TabulatedFunctionOperationService.asPoints(a);
@@ -51,7 +51,7 @@ public class TabulatedFunctionOperationService {
 
         for (int i = 0; i != size; i++) {
             if (pointsOfA[i].x != pointsOfB[i].x) {
-                throw new InconsistentFunctionsException();
+                throw new InconsistentFunctionsException("Значения X обеих функций должны совпадать!");
             }
             xValues[i] = pointsOfA[i].x;
             yValues[i] = operation.apply(pointsOfA[i].y, pointsOfB[i].y);

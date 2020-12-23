@@ -13,7 +13,7 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
 
     public LinkedListTabulatedFunction(double[] xValues, double[] yValues) {
         if (xValues.length < 2) {
-            throw new IllegalArgumentException("Less than minimum length");
+            throw new IllegalArgumentException("Невозможно создать функцию менее чем из двух точек.");
         }
         AbstractTabulatedFunction.checkLengthIsTheSame(xValues, yValues);
         AbstractTabulatedFunction.checkSorted(xValues);
@@ -24,7 +24,7 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
 
     public LinkedListTabulatedFunction(MathFunction source, double xFrom, double xTo, int count) {
         if (xFrom > xTo) {
-            throw new IllegalArgumentException("Incorrect data");
+            throw new IllegalArgumentException("Введите правильный интервал.");
         }
         double[] xValues = new double[count];
         xValues[0] = xFrom;
