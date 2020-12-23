@@ -89,7 +89,7 @@ public class Window extends JFrame {
                     refreshButton.setEnabled(true);
                     tableModel.fireTableDataChanged();
                 } catch (NumberFormatException exp) {
-                    ExceptionHandler.showMessage("Введите целое число.");
+                    ExceptionHandler.showCorgiMessage("Введите целое число.");
                 }
             }
         }
@@ -113,13 +113,13 @@ public class Window extends JFrame {
             } catch (NumberFormatException exp) {
                 ExceptionHandler.showMessage("Некорректные данные: введите числа в виде десятичной дроби через точку.");
             } catch (ArrayIsNotSortedException exp) {
-                ExceptionHandler.showMessage("Некорректные данные: значения X должны располагаться по возрастанию.");
+                ExceptionHandler.showCorgiMessage("Некорректные данные: значения X должны располагаться по возрастанию.");
             } catch (IllegalArgumentException exp) {
-                ExceptionHandler.showMessage("Невозможно создать функцию менее чем из двух точек.");
+                ExceptionHandler.showCorgiMessage("Невозможно создать функцию менее чем из двух точек.");
             }
         });
         refreshButton.addActionListener(e -> {
-            int flag = JOptionPane.showConfirmDialog(null, "Вы уверены? Это действие нельзя отменить.", "Предупреждение", JOptionPane.YES_NO_OPTION);
+            int flag = JOptionPane.showConfirmDialog(null, "Вы уверены? Это действие нельзя отменить.", "Предупреждение", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, new ImageIcon("images/warning.jpg"));
             if (flag == 0) {
                 int size = xValues.size();
                 xValues.clear();

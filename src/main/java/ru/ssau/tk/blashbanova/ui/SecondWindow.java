@@ -68,7 +68,7 @@ public class SecondWindow extends JFrame {
             try {
                 int size = Integer.parseInt(textField.getText());
                 if (size <= 0) {
-                    ExceptionHandler.showMessage("Введите положительное число.");
+                    ExceptionHandler.showCorgiMessage("Введите положительное число.");
                 }
                 createFunction();
                 dispose();
