@@ -71,6 +71,22 @@ public class MainWindow extends JFrame {
                 new SecondWindow();
             }
         });
+        operationButton.addActionListener(new AbstractAction() {
+            private static final long serialVersionUID = -4495051855082865387L;
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new OperationsWindow();
+            }
+        });
+        settingsButton.addActionListener(new AbstractAction() {
+            private static final long serialVersionUID = 2167223142435968187L;
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new SettingsWindow();
+            }
+        });
     }
 
     public static void main(String[] args) {
