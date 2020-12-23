@@ -9,7 +9,7 @@ import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SecondWindow extends JFrame {
+public class SecondWindow extends JDialog {
     JLabel label = new JLabel("Введите количество точек разбиения:");
     JTextField textField = new JTextField("");
     JLabel secondLabel = new JLabel("Интервал с");
@@ -22,11 +22,12 @@ public class SecondWindow extends JFrame {
     JButton firstButton = new JButton("Создать");
 
     public SecondWindow() {
-        super("SecondWindow");
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setModal(true);
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         setLayout(new FlowLayout());
         setSize(400, 200);
 
+        firstButton.setFocusPainted(false);
         getContentPane().add(label);
         getContentPane().add(textField);
         getContentPane().add(secondLabel);
