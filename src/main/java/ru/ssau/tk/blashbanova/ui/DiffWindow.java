@@ -17,8 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DiffWindow extends JDialog {
-    private static final int FIRST_FUNCTION = 0;
-    private static final int RESULT_FUNCTION = 2;
     private final List<String> xValues = new ArrayList<>();
     private final List<String> yValues = new ArrayList<>();
     private final List<String> resultXValues = new ArrayList<>();
@@ -101,6 +99,16 @@ public class DiffWindow extends JDialog {
         }
     }
 
+    private void setTable(TabulatedFunction function) {
+        if (function != null) {
+            firstFunction = function;
+            saveButton.setEnabled(true);
+            resultButton.setEnabled(true);
+            setValues(xValues, yValues, firstFunction);
+            firstTableModel.fireTableDataChanged();
+        }
+    }
+
     private void addButtonListeners() {
         createButton.addMouseListener(new MouseListener() {
             @Override
@@ -111,23 +119,11 @@ public class DiffWindow extends JDialog {
                     JMenuItem func = new JMenuItem("встроенной функции");
                     table.addActionListener(ee -> {
                         Window window = new Window(factory);
-                        if (window.getFunction() != null) {
-                            firstFunction = window.getFunction();
-                            saveButton.setEnabled(true);
-                            resultButton.setEnabled(true);
-                            setValues(xValues, yValues, firstFunction);
-                            firstTableModel.fireTableDataChanged();
-                        }
+                        setTable(window.getFunction());
                     });
                     func.addActionListener(ee -> {
                         SecondWindow secondWindow = new SecondWindow(factory);
-                        if (secondWindow.getFunction() != null) {
-                            firstFunction = secondWindow.getFunction();
-                            saveButton.setEnabled(true);
-                            resultButton.setEnabled(true);
-                            setValues(xValues, yValues, firstFunction);
-                            firstTableModel.fireTableDataChanged();
-                        }
+                        setTable(secondWindow.getFunction());
                     });
                     popupMenu.add(table);
                     popupMenu.addSeparator();
@@ -177,8 +173,9 @@ public class DiffWindow extends JDialog {
                     TabulatedFunction arrayFunction = FunctionsIO.readTabulatedFunction(arrayReader, factory);
                     firstFunction = arrayFunction;
                     setValues(xValues, yValues, arrayFunction);
+                    saveButton.setEnabled(true);
+                    resultButton.setEnabled(true);
                     firstTableModel.fireTableDataChanged();
-
                 } catch (IOException exp) {
                     ExceptionHandler.showCorgiMessage(exp.getMessage());
                 } catch (NumberFormatException exp) {
@@ -186,22 +183,16 @@ public class DiffWindow extends JDialog {
                 }
             }
         });
-        saveButton.addActionListener(e -> writeFunction(FIRST_FUNCTION));
-        resultSaveButton.addActionListener(e -> writeFunction(RESULT_FUNCTION));
+        saveButton.addActionListener(e -> writeFunction(firstFunction));
+        resultSaveButton.addActionListener(e -> writeFunction(resultFunction));
     }
 
-    private void writeFunction(int flag) {
+    private void writeFunction(TabulatedFunction function) {
         fileChooser.showSaveDialog(null);
         File file = fileChooser.getSelectedFile();
         if (file != null) {
             try (BufferedWriter arrayFileWriter = new BufferedWriter(new FileWriter(file))) {
-                switch (flag) {
-                    case FIRST_FUNCTION:
-                        FunctionsIO.writeTabulatedFunction(arrayFileWriter, firstFunction);
-                        break;
-                    case RESULT_FUNCTION:
-                        FunctionsIO.writeTabulatedFunction(arrayFileWriter, resultFunction);
-                }
+                FunctionsIO.writeTabulatedFunction(arrayFileWriter, function);
             } catch (IOException e) {
                 ExceptionHandler.showCorgiMessage(e.getMessage());
             }

@@ -17,12 +17,6 @@ public class MainWindow extends JFrame {
         setLayout(new FlowLayout());
         setSize(500, 500);
         setResizable(false);
-        getContentPane().add(arrayButton);
-        getContentPane().add(tabulatedButton);
-        getContentPane().add(operationButton);
-        getContentPane().add(settingsButton);
-        getContentPane().add(exitButton);
-        getContentPane().add(diffButton);
         arrayButton.setFocusPainted(false);
         tabulatedButton.setFocusPainted(false);
         operationButton.setFocusPainted(false);
