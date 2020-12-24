@@ -20,20 +20,20 @@ import java.util.List;
 public class DiffWindow extends JDialog {
     private static final int FIRST_FUNCTION = 0;
     private static final int RESULT_FUNCTION = 2;
-    List<String> xValues = new ArrayList<>();
-    List<String> yValues = new ArrayList<>();
-    List<String> resultXValues = new ArrayList<>();
-    List<String> resultYValues = new ArrayList<>();
-    AbstractTableModel firstTableModel = new TablePartlyEditable(xValues, yValues);
-    JTable firstTable = new JTable(firstTableModel);
-    AbstractTableModel resultTableModel = new TableNotEditable(resultXValues, resultYValues);
-    JTable resultTable = new JTable(resultTableModel);
-    JButton saveButton = new JButton("Сохранить");
-    JButton uploadButton = new JButton("Загрузить");
-    JButton createButton = new JButton("Создать из...");
-    JButton resultSaveButton = new JButton("Сохранить");
-    JButton resultButton = new JButton("Дифференцировать");
-    JFileChooser fileChooser;
+    private final List<String> xValues = new ArrayList<>();
+    private final List<String> yValues = new ArrayList<>();
+    private final List<String> resultXValues = new ArrayList<>();
+    private final List<String> resultYValues = new ArrayList<>();
+    private final AbstractTableModel firstTableModel = new TablePartlyEditable(xValues, yValues);
+    private final JTable firstTable = new JTable(firstTableModel);
+    private final AbstractTableModel resultTableModel = new TableNotEditable(resultXValues, resultYValues);
+    private final JTable resultTable = new JTable(resultTableModel);
+    private final JButton saveButton = new JButton("Сохранить");
+    private final JButton uploadButton = new JButton("Загрузить");
+    private final JButton createButton = new JButton("Создать из...");
+    private final JButton resultSaveButton = new JButton("Сохранить");
+    private final JButton resultButton = new JButton("Дифференцировать");
+    private JFileChooser fileChooser;
     private final TabulatedFunctionFactory factory;
     private TabulatedFunction firstFunction;
     private TabulatedFunction resultFunction;
@@ -53,6 +53,9 @@ public class DiffWindow extends JDialog {
         getContentPane().add(saveButton);
         getContentPane().add(uploadButton);
         getContentPane().add(createButton);
+        saveButton.setEnabled(false);
+        resultSaveButton.setEnabled(false);
+        resultButton.setEnabled(false);
         firstTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         addButtonListeners();
         compose();
@@ -113,15 +116,23 @@ public class DiffWindow extends JDialog {
                     JMenuItem func = new JMenuItem("встроенной функции");
                     table.addActionListener(ee -> {
                         Window window = new Window(factory);
-                        firstFunction = window.getFunction();
-                        setValues(xValues, yValues, firstFunction);
-                        firstTableModel.fireTableDataChanged();
+                        if (window.getFunction() != null) {
+                            firstFunction = window.getFunction();
+                            saveButton.setEnabled(true);
+                            resultButton.setEnabled(true);
+                            setValues(xValues, yValues, firstFunction);
+                            firstTableModel.fireTableDataChanged();
+                        }
                     });
                     func.addActionListener(ee -> {
                         SecondWindow secondWindow = new SecondWindow(factory);
-                        firstFunction = secondWindow.getFunction();
-                        setValues(xValues, yValues, firstFunction);
-                        firstTableModel.fireTableDataChanged();
+                        if (secondWindow.getFunction() != null) {
+                            firstFunction = secondWindow.getFunction();
+                            saveButton.setEnabled(true);
+                            resultButton.setEnabled(true);
+                            setValues(xValues, yValues, firstFunction);
+                            firstTableModel.fireTableDataChanged();
+                        }
                     });
                     popupMenu.add(table);
                     popupMenu.addSeparator();
@@ -153,6 +164,7 @@ public class DiffWindow extends JDialog {
                 TabulatedDifferentialOperator operator = new TabulatedDifferentialOperator(factory);
                 resultFunction = operator.derive(firstFunction);
                 setValues(resultXValues, resultYValues, resultFunction);
+                resultSaveButton.setEnabled(true);
                 resultTableModel.fireTableDataChanged();
             } catch (NullPointerException exp) {
                 ExceptionHandler.showMessage("Сначала введите функцию");

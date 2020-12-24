@@ -1,12 +1,10 @@
 package ru.ssau.tk.blashbanova.ui;
 
 import ru.ssau.tk.blashbanova.exceptions.InconsistentFunctionsException;
-import ru.ssau.tk.blashbanova.functions.ArrayTabulatedFunction;
 import ru.ssau.tk.blashbanova.functions.TabulatedFunction;
 import ru.ssau.tk.blashbanova.functions.factory.ArrayTabulatedFunctionFactory;
 import ru.ssau.tk.blashbanova.functions.factory.TabulatedFunctionFactory;
 import ru.ssau.tk.blashbanova.io.FunctionsIO;
-import ru.ssau.tk.blashbanova.operations.TabulatedDifferentialOperator;
 import ru.ssau.tk.blashbanova.operations.TabulatedFunctionOperationService;
 
 import javax.swing.*;
@@ -23,28 +21,28 @@ public class OperationsWindow extends JDialog {
     private static final int FIRST_FUNCTION = 0;
     private static final int SECOND_FUNCTION = 1;
     private static final int RESULT_FUNCTION = 2;
-    List<String> xValues = new ArrayList<>();
-    List<String> yValues = new ArrayList<>();
-    List<String> secondXValues = new ArrayList<>();
-    List<String> secondYValues = new ArrayList<>();
-    List<String> resultXValues = new ArrayList<>();
-    List<String> resultYValues = new ArrayList<>();
-    AbstractTableModel firstTableModel = new TablePartlyEditable(xValues, yValues);
-    JTable firstTable = new JTable(firstTableModel);
-    AbstractTableModel secondTableModel = new TablePartlyEditable(secondXValues, secondYValues);
-    JTable secondTable = new JTable(secondTableModel);
-    AbstractTableModel resultTableModel = new TableNotEditable(resultXValues, resultYValues);
-    JTable resultTable = new JTable(resultTableModel);
-    JComboBox<String> comboBox = new JComboBox<>(new String[]{"+", "-", "*", "/"});
-    JButton saveButton = new JButton("Сохранить");
-    JButton uploadButton = new JButton("Загрузить");
-    JButton createButton = new JButton("Создать из...");
-    JButton secondSaveButton = new JButton("Сохранить");
-    JButton resultSaveButton = new JButton("Сохранить");
-    JButton secondUploadButton = new JButton("Загрузить");
-    JButton secondCreateButton = new JButton("Создать из...");
-    JButton resultButton = new JButton("=");
-    JFileChooser fileChooser;
+    private final List<String> xValues = new ArrayList<>();
+    private final List<String> yValues = new ArrayList<>();
+    private final List<String> secondXValues = new ArrayList<>();
+    private final List<String> secondYValues = new ArrayList<>();
+    private final List<String> resultXValues = new ArrayList<>();
+    private final List<String> resultYValues = new ArrayList<>();
+    private final AbstractTableModel firstTableModel = new TablePartlyEditable(xValues, yValues);
+    private final JTable firstTable = new JTable(firstTableModel);
+    private final AbstractTableModel secondTableModel = new TablePartlyEditable(secondXValues, secondYValues);
+    private final JTable secondTable = new JTable(secondTableModel);
+    private final AbstractTableModel resultTableModel = new TableNotEditable(resultXValues, resultYValues);
+    private final JTable resultTable = new JTable(resultTableModel);
+    private final JComboBox<String> comboBox = new JComboBox<>(new String[]{"+", "-", "*", "/"});
+    private final JButton saveButton = new JButton("Сохранить");
+    private final JButton uploadButton = new JButton("Загрузить");
+    private final JButton createButton = new JButton("Создать из...");
+    private final JButton secondSaveButton = new JButton("Сохранить");
+    private final JButton resultSaveButton = new JButton("Сохранить");
+    private final JButton secondUploadButton = new JButton("Загрузить");
+    private final JButton secondCreateButton = new JButton("Создать из...");
+    private final JButton resultButton = new JButton("=");
+    private JFileChooser fileChooser;
     private final TabulatedFunctionFactory factory;
     private TabulatedFunction firstFunction;
     private TabulatedFunction secondFunction;
@@ -72,6 +70,9 @@ public class OperationsWindow extends JDialog {
         getContentPane().add(saveButton);
         getContentPane().add(uploadButton);
         getContentPane().add(createButton);
+        saveButton.setEnabled(false);
+        secondSaveButton.setEnabled(false);
+        resultSaveButton.setEnabled(false);
         firstTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         addButtonListeners();
         compose();
@@ -146,27 +147,35 @@ public class OperationsWindow extends JDialog {
         JMenuItem func = new JMenuItem("встроенной функции");
         table.addActionListener(ee -> {
             Window window = new Window(factory);
-            switch (flag) {
-                case FIRST_FUNCTION:
-                    firstFunction = window.getFunction();
-                    break;
-                case SECOND_FUNCTION:
-                    secondFunction = window.getFunction();
+            if (window.getFunction() != null) {
+                switch (flag) {
+                    case FIRST_FUNCTION:
+                        firstFunction = window.getFunction();
+                        saveButton.setEnabled(true);
+                        break;
+                    case SECOND_FUNCTION:
+                        secondFunction = window.getFunction();
+                        secondSaveButton.setEnabled(true);
+                }
+                setValues(xValues, yValues, window.getFunction());
+                tableModel.fireTableDataChanged();
             }
-            setValues(xValues, yValues, window.getFunction());
-            tableModel.fireTableDataChanged();
         });
         func.addActionListener(ee -> {
             SecondWindow secondWindow = new SecondWindow(factory);
-            switch (flag) {
-                case FIRST_FUNCTION:
-                    firstFunction = secondWindow.getFunction();
-                    break;
-                case SECOND_FUNCTION:
-                    secondFunction = secondWindow.getFunction();
+            if (secondWindow.getFunction() != null) {
+                switch (flag) {
+                    case FIRST_FUNCTION:
+                        firstFunction = secondWindow.getFunction();
+                        saveButton.setEnabled(true);
+                        break;
+                    case SECOND_FUNCTION:
+                        secondFunction = secondWindow.getFunction();
+                        secondSaveButton.setEnabled(true);
+                }
+                setValues(xValues, yValues, secondWindow.getFunction());
+                tableModel.fireTableDataChanged();
             }
-            setValues(xValues, yValues, secondWindow.getFunction());
-            tableModel.fireTableDataChanged();
         });
         popupMenu.add(table);
         popupMenu.addSeparator();
@@ -248,6 +257,7 @@ public class OperationsWindow extends JDialog {
                         resultFunction = operation.divide(firstFunction, secondFunction);
                 }
                 setValues(resultXValues, resultYValues, resultFunction);
+                resultSaveButton.setEnabled(true);
                 resultTableModel.fireTableDataChanged();
             } catch (NullPointerException exp) {
                 ExceptionHandler.showMessage("Введите обе функции!");
@@ -255,12 +265,11 @@ public class OperationsWindow extends JDialog {
                 ExceptionHandler.showCorgiMessage(exp.getMessage());
             }
         });
+
         fileChooser = new JFileChooser();
         fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
         fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("Text Files", "txt"));
         fileChooser.setAcceptAllFileFilterUsed(false);
-        //fileChooserOpen.addChoosableFileFilter(new FileNameExtensionFilter("Binary Executable Files", "bin"));
-        //TODO: чтобы считывались оба формата
         uploadButton.addActionListener(e -> readFunction(FIRST_FUNCTION));
         secondUploadButton.addActionListener(e -> readFunction(SECOND_FUNCTION));
         saveButton.addActionListener(e -> writeFunction(FIRST_FUNCTION));
@@ -311,7 +320,7 @@ public class OperationsWindow extends JDialog {
             } catch (IOException e) {
                 ExceptionHandler.showCorgiMessage(e.getMessage());
             } catch (NullPointerException e) {
-                ExceptionHandler.showMessage("Сначала введите функцию.");
+                ExceptionHandler.showMessage(e.getMessage());
             }
         }
     }

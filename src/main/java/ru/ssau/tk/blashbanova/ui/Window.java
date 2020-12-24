@@ -13,15 +13,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Window extends JDialog {
-    List<String> xValues = new ArrayList<>();
-    List<String> yValues = new ArrayList<>();
-    AbstractTableModel tableModel = new TableXY(xValues, yValues);
-    JTable table = new JTable(tableModel);
-    JLabel label = new JLabel("Число точек:");
-    JTextField textField = new JTextField("2");
-    JButton addingButton = new JButton("Добавить");
-    JButton refreshButton = new JButton("Очистить");
-    JButton createButton = new JButton("Создать");
+    private final List<String> xValues = new ArrayList<>();
+    private final List<String> yValues = new ArrayList<>();
+    private final AbstractTableModel tableModel = new TableXY(xValues, yValues);
+    private final JTable table = new JTable(tableModel);
+    private final JLabel label = new JLabel("Число точек:");
+    private final JTextField textField = new JTextField("2");
+    private final JButton addingButton = new JButton("Добавить");
+    private final JButton refreshButton = new JButton("Очистить");
+    private final JButton createButton = new JButton("Создать");
     private TabulatedFunction function;
     private final TabulatedFunctionFactory factory;
 

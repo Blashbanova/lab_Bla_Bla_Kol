@@ -26,6 +26,9 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
         if (xFrom > xTo) {
             throw new IllegalArgumentException("Введите правильный интервал.");
         }
+        if (count < 2) {
+            throw new IllegalArgumentException("Невозможно создать функцию менее чем из двух точек.");
+        }
         double[] xValues = new double[count];
         xValues[0] = xFrom;
         final double step = (xTo - xFrom) / (count - 1);

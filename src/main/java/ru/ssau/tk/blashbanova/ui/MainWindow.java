@@ -4,12 +4,12 @@ import javax.swing.*;
 import java.awt.*;
 
 public class MainWindow extends JFrame {
-    JButton arrayButton = new JButton("Создание функции с помощью массивов");
-    JButton tabulatedButton = new JButton("Создание табулировнной функции");
-    JButton operationButton = new JButton("Операции над функциями");
-    JButton diffButton = new JButton("Производная функции");
-    JButton settingsButton = new JButton("Настройки");
-    JButton exitButton = new JButton("Выход");
+    private final JButton arrayButton = new JButton("Создание функции с помощью массивов");
+    private final JButton tabulatedButton = new JButton("Создание табулировнной функции");
+    private final JButton operationButton = new JButton("Операции над функциями");
+    private final JButton diffButton = new JButton("Производная функции");
+    private final JButton settingsButton = new JButton("Настройки");
+    private final JButton exitButton = new JButton("Выход");
 
     public MainWindow() {
         super("MainWindow");

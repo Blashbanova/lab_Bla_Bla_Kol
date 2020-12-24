@@ -10,16 +10,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class SecondWindow extends JDialog {
-    JLabel label = new JLabel("Введите количество точек разбиения:");
-    JTextField textField = new JTextField("");
-    JLabel secondLabel = new JLabel("Интервал с");
-    JTextField secondTextField = new JTextField("");
-    JLabel thirdLabel = new JLabel("по");
-    JTextField thirdTextField = new JTextField("");
-    JComboBox<String> comboBox = new JComboBox<>(new String[]{
+    private final JLabel label = new JLabel("Введите количество точек разбиения:");
+    private final JTextField textField = new JTextField("");
+    private final JLabel secondLabel = new JLabel("Интервал с");
+    private final JTextField secondTextField = new JTextField("");
+    private final JLabel thirdLabel = new JLabel("по");
+    private final JTextField thirdTextField = new JTextField("");
+    private final JComboBox<String> comboBox = new JComboBox<>(new String[]{
             "Гиперболический тангенс", "Единичная функция", "Квадратичная функция", "Константная функция", "Модуль функция", "Нулевая функция", "Тождественная функция"
     });
-    JButton firstButton = new JButton("Создать");
+    private final JButton firstButton = new JButton("Создать");
     private TabulatedFunction function;
     private final TabulatedFunctionFactory factory;
 

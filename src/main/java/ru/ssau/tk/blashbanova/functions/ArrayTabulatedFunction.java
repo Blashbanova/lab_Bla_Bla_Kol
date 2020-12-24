@@ -28,6 +28,9 @@ public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements
         if (xFrom > xTo) {
             throw new IllegalArgumentException("Введите правильный интервал.");
         }
+        if (count < 2) {
+            throw new IllegalArgumentException("Невозможно создать функцию менее чем из двух точек.");
+        }
         this.count = count;
         xValues = new double[count];
         yValues = new double[count];

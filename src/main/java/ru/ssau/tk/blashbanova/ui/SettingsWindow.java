@@ -11,8 +11,9 @@ import java.awt.event.ItemEvent;
 import java.util.ArrayList;
 
 public class SettingsWindow extends JDialog {
-    JTabbedPane tabbedPane = new JTabbedPane();
+    private final JTabbedPane tabbedPane = new JTabbedPane();
     private static TabulatedFunctionFactory factory = new ArrayTabulatedFunctionFactory();
+    private static boolean checked = true;
 
     public SettingsWindow() {
         setModal(true);
@@ -79,20 +80,22 @@ public class SettingsWindow extends JDialog {
         ButtonGroup group = new ButtonGroup();
 
         public SecondPanel() {
-            JRadioButton firstButton = new JRadioButton("фабрика массивов", true);
+            JRadioButton firstButton = new JRadioButton("фабрика массивов", checked);
             group.add(firstButton);
-            JRadioButton secondButton = new JRadioButton("фабрика списков", false);
+            JRadioButton secondButton = new JRadioButton("фабрика списков", !checked);
             group.add(secondButton);
             add(firstButton);
             add(secondButton);
             firstButton.addItemListener(e -> {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
                     factory = new ArrayTabulatedFunctionFactory();
+                    checked = true;
                 }
             });
             secondButton.addItemListener(e -> {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
                     factory = new LinkedListTabulatedFunctionFactory();
+                    checked = false;
                 }
             });
         }
