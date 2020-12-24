@@ -247,6 +247,8 @@ public class OperationsWindow extends JDialog {
                 resultTableModel.fireTableDataChanged();
             } catch (InconsistentFunctionsException exp) {
                 ExceptionHandler.showCorgiMessage(exp.getMessage());
+            } catch (NullPointerException exp) {
+                ExceptionHandler.showMessage("Введите обе функции!");
             }
         });
         fileChooser = new JFileChooser();
