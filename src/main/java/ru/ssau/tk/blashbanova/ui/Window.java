@@ -34,11 +34,6 @@ public class Window extends JDialog {
         addingButton.setFocusPainted(false);
         refreshButton.setFocusPainted(false);
         createButton.setFocusPainted(false);
-        getContentPane().add(label);
-        getContentPane().add(textField);
-        getContentPane().add(addingButton);
-        getContentPane().add(refreshButton);
-        getContentPane().add(createButton);
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         addButtonListeners();
         compose();

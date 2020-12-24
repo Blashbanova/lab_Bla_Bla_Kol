@@ -65,11 +65,6 @@ public class OperationsWindow extends JDialog {
         comboBox.setPreferredSize(new Dimension(2, 2));
         comboBox.setFont(new Font("Consolas", Font.BOLD, 18));
         resultButton.setFont(new Font("Consolas", Font.BOLD, 24));
-        getContentPane().add(resultButton);
-        getContentPane().add(comboBox);
-        getContentPane().add(saveButton);
-        getContentPane().add(uploadButton);
-        getContentPane().add(createButton);
         saveButton.setEnabled(false);
         secondSaveButton.setEnabled(false);
         resultSaveButton.setEnabled(false);
@@ -265,7 +260,6 @@ public class OperationsWindow extends JDialog {
                 ExceptionHandler.showCorgiMessage(exp.getMessage());
             }
         });
-
         fileChooser = new JFileChooser();
         fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
         fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("Text Files", "txt"));
@@ -303,7 +297,7 @@ public class OperationsWindow extends JDialog {
     }
 
     private void writeFunction(int flag) {
-        fileChooser.showOpenDialog(null);
+        fileChooser.showSaveDialog(null);
         File file = fileChooser.getSelectedFile();
         if (file != null) {
             try (BufferedWriter arrayFileWriter = new BufferedWriter(new FileWriter(file))) {
@@ -319,8 +313,6 @@ public class OperationsWindow extends JDialog {
                 }
             } catch (IOException e) {
                 ExceptionHandler.showCorgiMessage(e.getMessage());
-            } catch (NullPointerException e) {
-                ExceptionHandler.showMessage(e.getMessage());
             }
         }
     }

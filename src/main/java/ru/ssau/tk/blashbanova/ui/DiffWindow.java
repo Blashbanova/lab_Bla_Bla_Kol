@@ -1,6 +1,5 @@
 package ru.ssau.tk.blashbanova.ui;
 
-import ru.ssau.tk.blashbanova.functions.ArrayTabulatedFunction;
 import ru.ssau.tk.blashbanova.functions.TabulatedFunction;
 import ru.ssau.tk.blashbanova.functions.factory.ArrayTabulatedFunctionFactory;
 import ru.ssau.tk.blashbanova.functions.factory.TabulatedFunctionFactory;
@@ -49,10 +48,6 @@ public class DiffWindow extends JDialog {
         createButton.setFocusPainted(false);
         resultSaveButton.setFocusPainted(false);
         resultButton.setFocusPainted(false);
-        getContentPane().add(resultButton);
-        getContentPane().add(saveButton);
-        getContentPane().add(uploadButton);
-        getContentPane().add(createButton);
         saveButton.setEnabled(false);
         resultSaveButton.setEnabled(false);
         resultButton.setEnabled(false);
@@ -196,7 +191,7 @@ public class DiffWindow extends JDialog {
     }
 
     private void writeFunction(int flag) {
-        fileChooser.showOpenDialog(null);
+        fileChooser.showSaveDialog(null);
         File file = fileChooser.getSelectedFile();
         if (file != null) {
             try (BufferedWriter arrayFileWriter = new BufferedWriter(new FileWriter(file))) {
@@ -209,8 +204,6 @@ public class DiffWindow extends JDialog {
                 }
             } catch (IOException e) {
                 ExceptionHandler.showCorgiMessage(e.getMessage());
-            } catch (NullPointerException e) {
-                ExceptionHandler.showMessage("Сначала введите функцию.");
             }
         }
     }

@@ -29,17 +29,7 @@ public class SecondWindow extends JDialog {
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         setLayout(new FlowLayout());
         setSize(400, 200);
-
         firstButton.setFocusPainted(false);
-        getContentPane().add(label);
-        getContentPane().add(textField);
-        getContentPane().add(secondLabel);
-        getContentPane().add(secondTextField);
-        getContentPane().add(thirdLabel);
-        getContentPane().add(thirdTextField);
-        getContentPane().add(comboBox);
-        getContentPane().add(firstButton);
-
         addButtonListeners();
         compose();
         setLocationRelativeTo(null);
@@ -59,7 +49,6 @@ public class SecondWindow extends JDialog {
         mapFunction.put("Модуль функция", new ModulusFunction());
         mapFunction.put("Нулевая функция", new ZeroFunction());
         mapFunction.put("Тождественная функция", new IdentityFunction());
-
         String func = (String) comboBox.getSelectedItem();
         MathFunction selectedFunction = mapFunction.get(func);
         double from = Double.parseDouble(secondTextField.getText());
@@ -104,7 +93,6 @@ public class SecondWindow extends JDialog {
                 .addComponent(comboBox)
                 .addComponent(firstButton)
         );
-
         layout.setVerticalGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                         .addComponent(label)

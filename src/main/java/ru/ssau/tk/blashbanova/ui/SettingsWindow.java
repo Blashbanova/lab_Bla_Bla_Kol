@@ -20,18 +20,14 @@ public class SettingsWindow extends JDialog {
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         setLayout(new FlowLayout());
         setSize(400, 400);
-
         tabbedPane.setPreferredSize(new Dimension(300, 300));
-
         JPanel design = new FirstPanel();
         JPanel factorySelection = new SecondPanel();
         tabbedPane.addTab("Дизайн", design);
         tabbedPane.addTab("Выбор фабрики", factorySelection);
         tabbedPane.setBackground(Color.orange);
         tabbedPane.setForeground(Color.white);
-
         getContentPane().add(tabbedPane);
-
         setLocationRelativeTo(null);
         setVisible(true);
     }
