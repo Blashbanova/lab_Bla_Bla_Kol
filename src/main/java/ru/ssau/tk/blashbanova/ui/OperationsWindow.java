@@ -6,6 +6,7 @@ import ru.ssau.tk.blashbanova.functions.TabulatedFunction;
 import ru.ssau.tk.blashbanova.functions.factory.ArrayTabulatedFunctionFactory;
 import ru.ssau.tk.blashbanova.functions.factory.TabulatedFunctionFactory;
 import ru.ssau.tk.blashbanova.io.FunctionsIO;
+import ru.ssau.tk.blashbanova.operations.TabulatedDifferentialOperator;
 import ru.ssau.tk.blashbanova.operations.TabulatedFunctionOperationService;
 
 import javax.swing.*;
@@ -272,7 +273,7 @@ public class OperationsWindow extends JDialog {
         File file = fileChooser.getSelectedFile();
         if (file != null) {
             try (BufferedReader arrayReader = new BufferedReader(new FileReader(file))) {
-                ArrayTabulatedFunction arrayFunction = (ArrayTabulatedFunction) FunctionsIO.readTabulatedFunction(arrayReader, new ArrayTabulatedFunctionFactory());
+                TabulatedFunction arrayFunction = FunctionsIO.readTabulatedFunction(arrayReader, factory);
                 switch (flag) {
                     case FIRST_FUNCTION:
                         firstFunction = arrayFunction;
@@ -286,6 +287,8 @@ public class OperationsWindow extends JDialog {
                 }
             } catch (IOException e) {
                 ExceptionHandler.showCorgiMessage(e.getMessage());
+            } catch (NumberFormatException exp) {
+                ExceptionHandler.showMessage("Файл пуст или данные введены некорректно!");
             }
         }
     }
@@ -307,6 +310,8 @@ public class OperationsWindow extends JDialog {
                 }
             } catch (IOException e) {
                 ExceptionHandler.showCorgiMessage(e.getMessage());
+            } catch (NullPointerException e) {
+                ExceptionHandler.showMessage("Сначала введите функцию.");
             }
         }
     }

@@ -2,13 +2,12 @@ package ru.ssau.tk.blashbanova.ui;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 
 public class MainWindow extends JFrame {
-
     JButton arrayButton = new JButton("Создание функции с помощью массивов");
     JButton tabulatedButton = new JButton("Создание табулировнной функции");
     JButton operationButton = new JButton("Операции над функциями");
+    JButton diffButton = new JButton("Производная функции");
     JButton settingsButton = new JButton("Настройки");
     JButton exitButton = new JButton("Выход");
 
@@ -16,19 +15,22 @@ public class MainWindow extends JFrame {
         super("MainWindow");
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setLayout(new FlowLayout());
-        int width = 600;
-        int height = 600;
-        setSize(width, height);
-
+        setSize(500, 500);
+        setResizable(false);
         getContentPane().add(arrayButton);
         getContentPane().add(tabulatedButton);
         getContentPane().add(operationButton);
         getContentPane().add(settingsButton);
         getContentPane().add(exitButton);
-
+        getContentPane().add(diffButton);
+        arrayButton.setFocusPainted(false);
+        tabulatedButton.setFocusPainted(false);
+        operationButton.setFocusPainted(false);
+        settingsButton.setFocusPainted(false);
+        exitButton.setFocusPainted(false);
+        diffButton.setFocusPainted(false);
         compose();
         addButtonListeners();
-
         setLocationRelativeTo(null);
         setVisible(true);
     }
@@ -39,54 +41,54 @@ public class MainWindow extends JFrame {
         layout.setAutoCreateGaps(true);
         layout.setAutoCreateContainerGaps(true);
         layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-                .addComponent(arrayButton)
-                .addComponent(tabulatedButton)
-                .addComponent(operationButton)
-                .addComponent(settingsButton)
-                .addComponent(exitButton)
+                .addGroup(layout.createSequentialGroup()
+                        .addGap(100)
+                        .addComponent(arrayButton)
+                )
+                .addGroup(layout.createSequentialGroup()
+                        .addGap(100)
+                        .addComponent(tabulatedButton)
+                )
+                .addGroup(layout.createSequentialGroup()
+                        .addGap(100)
+                        .addComponent(operationButton)
+                )
+                .addGroup(layout.createSequentialGroup()
+                        .addGap(100)
+                        .addComponent(diffButton)
+                )
+                .addGroup(layout.createSequentialGroup()
+                        .addGap(100)
+                        .addComponent(settingsButton)
+                )
+                .addGroup(layout.createSequentialGroup()
+                        .addGap(100)
+                        .addComponent(exitButton)
+                )
         );
         layout.setVerticalGroup(layout.createSequentialGroup()
+                .addGap(70)
                 .addComponent(arrayButton)
+                .addGap(20)
                 .addComponent(tabulatedButton)
+                .addGap(20)
                 .addComponent(operationButton)
+                .addGap(20)
+                .addComponent(diffButton)
+                .addGap(20)
                 .addComponent(settingsButton)
+                .addGap(20)
                 .addComponent(exitButton)
         );
     }
 
     private void addButtonListeners() {
-        arrayButton.addActionListener(new AbstractAction() {
-            private static final long serialVersionUID = -4459501857296985585L;
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                new Window(SettingsWindow.getFactory());
-            }
-        });
-        tabulatedButton.addActionListener(new AbstractAction() {
-            private static final long serialVersionUID = 1878831017157398170L;
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                new SecondWindow(SettingsWindow.getFactory());
-            }
-        });
-        operationButton.addActionListener(new AbstractAction() {
-            private static final long serialVersionUID = -4495051855082865387L;
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                new OperationsWindow(SettingsWindow.getFactory());
-            }
-        });
-        settingsButton.addActionListener(new AbstractAction() {
-            private static final long serialVersionUID = 2167223142435968187L;
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                new SettingsWindow();
-            }
-        });
+        arrayButton.addActionListener(e -> new Window(SettingsWindow.getFactory()));
+        tabulatedButton.addActionListener(e -> new SecondWindow(SettingsWindow.getFactory()));
+        operationButton.addActionListener(e -> new OperationsWindow(SettingsWindow.getFactory()));
+        settingsButton.addActionListener(e -> new SettingsWindow());
+        diffButton.addActionListener(e -> new DiffWindow(SettingsWindow.getFactory()));
+        exitButton.addActionListener(e -> System.exit(0));
     }
 
     public static void main(String[] args) {
